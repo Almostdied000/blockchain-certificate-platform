@@ -47,18 +47,68 @@ const Students = () => {
 
       {/* Student Details Modal */}
       {selectedStudent && (
-        <div className="modal-overlay animate-fade-in" onClick={() => setSelectedStudent(null)}>
-          <div className="modal-content glass-panel" onClick={e => e.stopPropagation()} style={{ maxWidth: '600px', width: '90%' }}>
-            <div className="modal-header">
-              <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div 
+          className="modal-overlay animate-fade-in" 
+          onClick={() => setSelectedStudent(null)}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1000,
+            padding: '1.5rem'
+          }}
+        >
+          <div 
+            className="modal-content glass-panel" 
+            onClick={e => e.stopPropagation()} 
+            style={{ 
+              maxWidth: '600px', 
+              width: '100%',
+              position: 'relative',
+              maxHeight: '90vh',
+              overflowY: 'auto'
+            }}
+          >
+            {/* Close Button at the Corner */}
+            <button 
+              className="btn-icon" 
+              onClick={() => setSelectedStudent(null)}
+              style={{
+                position: 'absolute',
+                top: '1rem',
+                right: '1rem',
+                zIndex: 10,
+                background: 'rgba(255, 255, 255, 0.05)',
+                padding: '0.5rem',
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s ease',
+                color: 'var(--text-secondary)'
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.1)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+            >
+              <X size={20} />
+            </button>
+
+            <div className="modal-header" style={{ padding: '1.5rem 2rem', borderBottom: '1px solid var(--border-strong)' }}>
+              <h2 style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '1.25rem' }}>
                 <User size={24} color="var(--accent-primary)" /> Student Profile
               </h2>
-              <button className="btn-icon" onClick={() => setSelectedStudent(null)}><X size={20} /></button>
             </div>
 
             <div style={{ padding: '2rem' }}>
               <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '2rem', alignItems: 'center' }}>
-                <div className="avatar" style={{ width: '80px', height: '80px', fontSize: '2rem' }}>
+                <div className="avatar" style={{ width: '80px', height: '80px', fontSize: '2rem', flexShrink: 0 }}>
                   {selectedStudent.name.charAt(0)}
                 </div>
                 <div>
@@ -72,15 +122,18 @@ const Students = () => {
                 </div>
               </div>
 
-              <div style={{ borderTop: '1px solid var(--border-strong)', pt: '1.5rem' }}>
+              <div style={{ borderTop: '1px solid var(--border-strong)', paddingTop: '1.5rem' }}>
                 <h4 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <FileBadge size={18} /> Issued Certificates ({getStudentCerts(selectedStudent.name).length})
                 </h4>
-                <div className="certificate-list-mini">
+                <div className="certificate-list-mini" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {getStudentCerts(selectedStudent.name).map((cert, i) => (
-                    <div key={i} className="mini-cert-item glass-panel">
-                      <div style={{ fontWeight: 600 }}>{cert.courseName}</div>
-                      <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>ID: {cert.id} • {cert.issueDate}</div>
+                    <div key={i} className="mini-cert-item glass-panel" style={{ padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <div>
+                        <div style={{ fontWeight: 600 }}>{cert.courseName}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>ID: {cert.id} • {cert.issueDate}</div>
+                      </div>
+                      <div className="badge badge-success" style={{ fontSize: '0.7rem' }}>Verified</div>
                     </div>
                   ))}
                   {getStudentCerts(selectedStudent.name).length === 0 && (
