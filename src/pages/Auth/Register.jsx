@@ -31,9 +31,9 @@ const Register = () => {
 
     try {
       registerUser({
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
+        name: formData.name.trim(),
+        email: formData.email.trim().toLowerCase(),
+        password: formData.password.trim(),
         role: role
       });
       navigate('/login');
@@ -109,6 +109,9 @@ const Register = () => {
                 placeholder="john@example.com"
                 onChange={handleChange}
                 required
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck="false"
               />
             </div>
           </div>

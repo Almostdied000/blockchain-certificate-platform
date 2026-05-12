@@ -15,7 +15,10 @@ const Login = ({ setUser }) => {
     e.preventDefault();
     setError('');
     
-    const user = loginUser(email, password);
+    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedPassword = password.trim();
+    
+    const user = loginUser(normalizedEmail, normalizedPassword);
     if (user) {
       if (user.role !== role) {
         setError(`This account is registered as a ${user.role}. Please select the correct role.`);
@@ -80,6 +83,9 @@ const Login = ({ setUser }) => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 autoComplete="off"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck="false"
               />
             </div>
           </div>
