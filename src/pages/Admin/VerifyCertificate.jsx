@@ -53,10 +53,10 @@ const VerifyCertificate = () => {
 
         <form onSubmit={handleVerify} style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
           <div style={{ flex: 1 }}>
-            <input 
-              type="text" 
-              className="input-field" 
-              placeholder="e.g., CERT-0089 or 0xabc123..." 
+            <input
+              type="text"
+              className="input-field"
+              placeholder="e.g., CERT-0089 or 0xabc123..."
               value={certId}
               onChange={(e) => setCertId(e.target.value)}
               style={{ fontSize: '1.1rem', padding: '1rem' }}
@@ -131,6 +131,7 @@ const VerifyCertificate = () => {
               </div>
             </div>
           </div>
+        )}
       </div>
     </div>
   );

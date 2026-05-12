@@ -31,8 +31,8 @@ const Students = () => {
     return certificates.filter(c => c.studentName === studentName);
   };
 
-  const filteredStudents = students.filter(s => 
-    s.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+  const filteredStudents = students.filter(s =>
+    s.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     s.email.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -55,7 +55,7 @@ const Students = () => {
               </h2>
               <button className="btn-icon" onClick={() => setSelectedStudent(null)}><X size={20} /></button>
             </div>
-            
+
             <div style={{ padding: '2rem' }}>
               <div style={{ display: 'flex', gap: '1.5rem', marginBottom: '2rem', alignItems: 'center' }}>
                 <div className="avatar" style={{ width: '80px', height: '80px', fontSize: '2rem' }}>
@@ -99,10 +99,10 @@ const Students = () => {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem', gap: '1rem' }}>
           <div style={{ position: 'relative', flex: 1 }}>
             <Search size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-            <input 
-              type="text" 
-              className="input-field" 
-              placeholder="Search students by name or email..." 
+            <input
+              type="text"
+              className="input-field"
+              placeholder="Search students by name or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{ paddingLeft: '3rem' }}
@@ -125,9 +125,9 @@ const Students = () => {
             </thead>
             <tbody>
               {filteredStudents.map((student, i) => (
-                <tr 
-                  key={i} 
-                  className="animate-fade-in clickable-row" 
+                <tr
+                  key={i}
+                  className="animate-fade-in clickable-row"
                   style={{ animationDelay: `${i * 0.05}s`, cursor: 'pointer' }}
                   onClick={() => setSelectedStudent(student)}
                 >
@@ -150,9 +150,9 @@ const Students = () => {
                     </span>
                   </td>
                   <td style={{ textAlign: 'right' }}>
-                    <button 
+                    <button
                       onClick={(e) => handleDelete(e, student.email)}
-                      className="btn-icon" 
+                      className="btn-icon"
                       style={{ color: '#ef4444', background: 'rgba(239, 68, 68, 0.1)', padding: '0.5rem', borderRadius: '8px', border: 'none', cursor: 'pointer' }}
                       title="Delete Student"
                     >

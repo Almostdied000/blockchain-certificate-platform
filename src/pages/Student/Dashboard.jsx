@@ -26,7 +26,7 @@ const Dashboard = () => {
     const ctx = canvas.getContext('2d');
     canvas.width = 1200;
     canvas.height = 850;
-    
+
     const themes = {
       professional: { primary: '#3b82f6', secondary: '#1e40af', bg: '#ffffff', border: '#1e293b', font: 'sans-serif' },
       academic: { primary: '#1e293b', secondary: '#0f172a', bg: '#fffdf9', border: '#1e293b', font: 'serif' },
@@ -38,7 +38,7 @@ const Dashboard = () => {
     // 1. Background
     ctx.fillStyle = theme.bg;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
+
     // 2. Borders (Unique for each)
     if (cert.template === 'academic') {
       ctx.strokeStyle = theme.primary;
@@ -72,23 +72,23 @@ const Dashboard = () => {
     if (cert.template === 'minimal') {
       ctx.textAlign = 'left';
       const startX = 150;
-      
+
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 30px sans-serif';
       ctx.fillText('CertiChain Verified', startX, 100);
-      
+
       ctx.fillStyle = theme.primary;
       ctx.font = 'bold 80px sans-serif';
       ctx.fillText('CERTIFICATE', startX, 220);
-      
+
       ctx.fillStyle = '#94a3b8';
       ctx.font = '24px sans-serif';
       ctx.fillText('This digital asset confirms that', startX, 300);
-      
+
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 70px sans-serif';
       ctx.fillText(cert.studentName.toUpperCase(), startX, 400);
-      
+
       ctx.fillStyle = '#94a3b8';
       ctx.font = '24px sans-serif';
       ctx.fillText(`Successfully achieved mastery in ${cert.course}`, startX, 480);
@@ -96,7 +96,7 @@ const Dashboard = () => {
       ctx.fillStyle = theme.primary;
       ctx.font = 'bold 30px sans-serif';
       ctx.fillText(`GRADE: ${cert.grade}`, startX, 550);
-      
+
       ctx.fillStyle = '#475569';
       ctx.font = '14px monospace';
       ctx.fillText(`TXN: ${cert.id}`, startX, 780);
@@ -105,14 +105,14 @@ const Dashboard = () => {
     } else {
       // Centered Layouts (Pro, Academic, Excellence)
       ctx.textAlign = 'center';
-      
+
       // Title
       ctx.fillStyle = theme.primary;
       ctx.font = `bold ${cert.template === 'excellence' ? '70px' : '60px'} ${theme.font}`;
-      const title = cert.template === 'academic' ? 'DIPLOMA OF COMPLETION' : 
-                   cert.template === 'excellence' ? 'CERTIFICATE OF EXCELLENCE' : 'CERTIFICATE OF ACHIEVEMENT';
+      const title = cert.template === 'academic' ? 'DIPLOMA OF COMPLETION' :
+        cert.template === 'excellence' ? 'CERTIFICATE OF EXCELLENCE' : 'CERTIFICATE OF ACHIEVEMENT';
       ctx.fillText(title, canvas.width / 2, 180);
-      
+
       // Body Text
       ctx.fillStyle = '#64748b';
       ctx.font = `24px ${theme.font}`;
@@ -122,7 +122,7 @@ const Dashboard = () => {
       ctx.fillStyle = '#0f172a';
       ctx.font = `bold 85px ${theme.font}`;
       ctx.fillText(cert.studentName.toUpperCase(), canvas.width / 2, 360);
-      
+
       // Underline
       ctx.beginPath();
       ctx.moveTo(canvas.width / 2 - 350, 385);
@@ -139,7 +139,7 @@ const Dashboard = () => {
       ctx.fillStyle = '#0f172a';
       ctx.font = `bold 50px ${theme.font}`;
       ctx.fillText(cert.course.toUpperCase(), canvas.width / 2, 530);
-      
+
       // Date & Grade
       ctx.fillStyle = '#475569';
       ctx.font = `italic 22px ${theme.font}`;
@@ -156,7 +156,7 @@ const Dashboard = () => {
     if (cert.template !== 'minimal') {
       ctx.save();
       ctx.translate(canvas.width / 2, 700);
-      
+
       // Circular Seal
       ctx.beginPath();
       ctx.arc(0, 0, 60, 0, Math.PI * 2);
@@ -165,7 +165,7 @@ const Dashboard = () => {
       ctx.strokeStyle = theme.primary;
       ctx.lineWidth = 1;
       ctx.stroke();
-      
+
       // Logo Text
       ctx.textAlign = 'center';
       ctx.fillStyle = theme.primary;
@@ -190,7 +190,7 @@ const Dashboard = () => {
       ctx.font = '12px sans-serif';
       ctx.fillText('Authorized Signature', canvas.width - 100, 770);
     }
-    
+
     return canvas;
   };
 
@@ -259,7 +259,7 @@ const Dashboard = () => {
                 <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginTop: '0.5rem' }}>{cert.issuer}</div>
               </div>
             </div>
-            
+
             <div className="certificate-details">
               <h3>{cert.course}</h3>
               <div className="certificate-meta">
@@ -276,7 +276,7 @@ const Dashboard = () => {
                   <span style={{ color: 'var(--text-primary)' }}>{cert.grade}</span>
                 </div>
               </div>
-              
+
               <div style={{ marginBottom: '1.25rem' }}>
                 {cert.status === 'pending' ? (
                   <div className="badge" style={{ background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', width: '100%', justifyContent: 'center', padding: '0.5rem' }}>
@@ -290,18 +290,18 @@ const Dashboard = () => {
               </div>
 
               <div className="certificate-actions">
-                <button 
-                  onClick={() => handleDownload(cert)} 
-                  className={`btn ${cert.status === 'pending' ? 'btn-disabled' : 'btn-primary'}`} 
+                <button
+                  onClick={() => handleDownload(cert)}
+                  className={`btn ${cert.status === 'pending' ? 'btn-disabled' : 'btn-primary'}`}
                   style={{ padding: '0.5rem', flex: 1 }}
                   disabled={cert.status === 'pending'}
                 >
-                  {cert.status === 'pending' ? <Lock size={16} /> : <Download size={16} />} 
+                  {cert.status === 'pending' ? <Lock size={16} /> : <Download size={16} />}
                   {cert.status === 'pending' ? 'Locked' : 'Download'}
                 </button>
-                <button 
-                  onClick={() => handleShare(cert)} 
-                  className={`btn ${cert.status === 'pending' ? 'btn-disabled' : 'btn-secondary'}`} 
+                <button
+                  onClick={() => handleShare(cert)}
+                  className={`btn ${cert.status === 'pending' ? 'btn-disabled' : 'btn-secondary'}`}
                   style={{ padding: '0.5rem', flex: 1 }}
                   disabled={cert.status === 'pending'}
                 >
