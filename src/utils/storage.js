@@ -123,14 +123,14 @@ export const loginUser = async (email, password) => {
   const user = users.find(u => u.email === email && u.password === password);
   
   if (user) {
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+    sessionStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
     return user;
   }
   return null;
 };
 
 export const getCurrentUser = () => {
-  const user = localStorage.getItem(CURRENT_USER_KEY);
+  const user = sessionStorage.getItem(CURRENT_USER_KEY);
   return user ? JSON.parse(user) : null;
 };
 
@@ -141,5 +141,5 @@ export const deleteUser = async (id) => {
 };
 
 export const logout = () => {
-  localStorage.removeItem(CURRENT_USER_KEY);
+  sessionStorage.removeItem(CURRENT_USER_KEY);
 };
