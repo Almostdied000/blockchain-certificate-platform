@@ -12,17 +12,17 @@ const Students = () => {
     refreshData();
   }, []);
 
-  const refreshData = () => {
-    const allUsers = getUsers();
+  const refreshData = async () => {
+    const allUsers = await getUsers();
     setStudents(allUsers.filter(u => u.role === 'student'));
-    setCertificates(getCertificates());
+    setCertificates(await getCertificates());
   };
 
-  const handleDelete = (e, email) => {
+  const handleDelete = async (e, id) => {
     e.stopPropagation(); // Prevent opening details modal
     if (window.confirm('Are you sure you want to delete this student account? This will remove all their access to the platform.')) {
-      deleteUser(email);
-      if (selectedStudent?.email === email) setSelectedStudent(null);
+      await deleteUser(id);
+      if (selectedStudent?.id === id) setSelectedStudent(null);
       refreshData();
     }
   };
@@ -204,7 +204,7 @@ const Students = () => {
                   </td>
                   <td style={{ textAlign: 'right' }}>
                     <button
-                      onClick={(e) => handleDelete(e, student.email)}
+                      onClick={(e) => handleDelete(e, student.id)}
                       className="btn-icon"
                       style={{ color: '#ef4444', background: 'rgba(239, 68, 68, 0.1)', padding: '0.5rem', borderRadius: '8px', border: 'none', cursor: 'pointer' }}
                       title="Delete Student"

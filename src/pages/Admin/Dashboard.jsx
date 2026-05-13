@@ -12,29 +12,33 @@ const Dashboard = () => {
     refreshData();
   }, []);
 
-  const refreshData = () => {
-    setCertificates(getCertificates());
-    setUsers(getUsers().filter(u => u.role === 'student'));
-    setVerifications(getVerifications());
+  const refreshData = async () => {
+    const fetchedCerts = await getCertificates();
+    const fetchedUsers = await getUsers();
+    const fetchedVerifications = await getVerifications();
+    
+    setCertificates(fetchedCerts);
+    setUsers(fetchedUsers.filter(u => u.role === 'student'));
+    setVerifications(fetchedVerifications);
   };
 
-  const handleDeleteStudent = (email) => {
+  const handleDeleteStudent = async (id) => {
     if (window.confirm('Are you sure you want to delete this student? This action cannot be undone.')) {
-      deleteUser(email);
+      await deleteUser(id);
       refreshData();
     }
   };
 
-  const handleDeleteCertificate = (id) => {
+  const handleDeleteCertificate = async (id) => {
     if (window.confirm('Are you sure you want to delete this certificate? This will permanently remove it from the blockchain record.')) {
-      deleteCertificate(id);
+      await deleteCertificate(id);
       refreshData();
     }
   };
 
-  const handleDeleteVerification = (timestamp) => {
+  const handleDeleteVerification = async (id) => {
     if (window.confirm('Are you sure you want to delete this verification log?')) {
-      deleteVerification(timestamp);
+      await deleteVerification(id);
       refreshData();
     }
   };
@@ -189,7 +193,7 @@ const Dashboard = () => {
                     <td style={{ color: 'var(--text-muted)' }}>{new Date(log.timestamp).toLocaleString()}</td>
                     <td style={{ textAlign: 'right' }}>
                       <button 
-                        onClick={() => handleDeleteVerification(log.timestamp)}
+                        onClick={() => handleDeleteVerification(log.id)}
                         className="btn-icon" 
                         style={{ color: '#ef4444', background: 'rgba(239, 68, 68, 0.1)', padding: '0.4rem', borderRadius: '6px', border: 'none', cursor: 'pointer' }}
                         title="Delete Log"
@@ -233,7 +237,7 @@ const Dashboard = () => {
                     <td><span className="badge badge-success">Active</span></td>
                     <td style={{ textAlign: 'right' }}>
                       <button 
-                        onClick={() => handleDeleteStudent(student.email)}
+                        onClick={() => handleDeleteStudent(student.id)}
                         className="btn-icon" 
                         style={{ color: '#ef4444', background: 'rgba(239, 68, 68, 0.1)', padding: '0.4rem', borderRadius: '6px', border: 'none', cursor: 'pointer' }}
                         title="Delete Student"

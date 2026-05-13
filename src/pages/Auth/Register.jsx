@@ -20,7 +20,7 @@ const Register = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -30,7 +30,7 @@ const Register = () => {
     }
 
     try {
-      registerUser({
+      await registerUser({
         name: formData.name.trim(),
         email: formData.email.trim().toLowerCase(),
         password: formData.password.trim(),

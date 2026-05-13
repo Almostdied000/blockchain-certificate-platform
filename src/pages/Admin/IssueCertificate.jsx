@@ -33,16 +33,15 @@ const IssueCertificate = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleIssue = (e) => {
+  const handleIssue = async (e) => {
     e.preventDefault();
-    const newCert = saveCertificate(formData);
-    setIssuedCert(newCert);
-    setIsSuccess(true);
-    
-    // Reset form after 3 seconds or keep success view
-    setTimeout(() => {
-      // Optional: setIsSuccess(false);
-    }, 5000);
+    try {
+      const newCert = await saveCertificate(formData);
+      setIssuedCert(newCert);
+      setIsSuccess(true);
+    } catch (error) {
+      alert('Error issuing certificate: ' + error.message);
+    }
   };
 
   return (

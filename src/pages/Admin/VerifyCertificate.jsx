@@ -18,8 +18,8 @@ const VerifyCertificate = () => {
     }
   }, [location]);
 
-  const performVerification = (id) => {
-    const result = verifyCertificate(id);
+  const performVerification = async (id) => {
+    const result = await verifyCertificate(id);
     if (result) {
       setVerificationResult('success');
       setCertDetails(result);
@@ -29,10 +29,10 @@ const VerifyCertificate = () => {
     }
   };
 
-  const handleVerify = (e) => {
+  const handleVerify = async (e) => {
     e.preventDefault();
     if (!certId) return;
-    performVerification(certId);
+    await performVerification(certId);
   };
 
   return (

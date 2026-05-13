@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Download, Share2, Award, Lock, ShieldAlert, CheckCircle } from 'lucide-react';
-import { getCertificates } from '../../utils/storage';
+import { getCertificates, getCurrentUser } from '../../utils/storage';
 
 const Dashboard = () => {
   const [certificates, setCertificates] = useState([]);
 
   useEffect(() => {
-    const data = getCertificates();
-    setCertificates(data);
+    const fetchData = async () => {
+      const user = getCurrentUser();
+      const allCerts = await getCertificates();
+      // Filter certificates for this student
+      const studentCerts = allCerts.filter(c => 
+        c.studentName?.toLowerCase() === user?.name?.toLowerCase() || 
+        c.studentEmail === user?.email
+      );
+      setCertificates(studentCerts);
+    };
+    fetchData();
   }, []);
 
   const allCertificates = certificates.map(c => ({

@@ -11,23 +11,27 @@ const Login = ({ setUser }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedPassword = password.trim();
     
-    const user = loginUser(normalizedEmail, normalizedPassword);
-    if (user) {
-      if (user.role !== role) {
-        setError(`This account is registered as a ${user.role}. Please select the correct role.`);
-        return;
+    try {
+      const user = await loginUser(normalizedEmail, normalizedPassword);
+      if (user) {
+        if (user.role !== role) {
+          setError(`This account is registered as a ${user.role}. Please select the correct role.`);
+          return;
+        }
+        setUser(user);
+        navigate(user.role === 'admin' ? '/admin' : '/student');
+      } else {
+        setError('Invalid email or password');
       }
-      setUser(user);
-      navigate(user.role === 'admin' ? '/admin' : '/student');
-    } else {
-      setError('Invalid email or password');
+    } catch (err) {
+      setError('An error occurred during login. Please try again.');
     }
   };
 
