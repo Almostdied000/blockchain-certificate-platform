@@ -31,7 +31,7 @@ const StudentLayout = ({ setUser, user }) => {
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontWeight: 600, fontSize: '0.875rem' }}>{user.name}</div>
-            <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>{user.id}</div>
+            <div style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>{user.email}</div>
           </div>
           <button onClick={handleLogout} className="btn-outline" style={{ padding: '0.5rem', borderRadius: '50%', border: 'none', color: 'var(--text-muted)' }}>
             <LogOut size={18} />
