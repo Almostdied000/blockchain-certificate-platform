@@ -7,6 +7,7 @@ const Login = ({ setUser }) => {
   const [role, setRole] = useState('admin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [securityCode, setSecurityCode] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -17,6 +18,11 @@ const Login = ({ setUser }) => {
     
     const normalizedEmail = email.trim().toLowerCase();
     const normalizedPassword = password.trim();
+
+    if (role === 'admin' && securityCode !== '8050') {
+      setError('Invalid admin security code. Please enter the correct code to access the admin portal.');
+      return;
+    }
     
     try {
       const user = await loginUser(normalizedEmail, normalizedPassword);
@@ -129,6 +135,24 @@ const Login = ({ setUser }) => {
               </button>
             </div>
           </div>
+
+          {role === 'admin' && (
+            <div className="input-group" style={{ marginBottom: '2rem' }}>
+              <label className="input-label">Admin Security Code</label>
+              <div style={{ position: 'relative' }}>
+                <Shield size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <input 
+                  type="password" 
+                  className="input-field" 
+                  style={{ paddingLeft: '3rem' }}
+                  placeholder="Enter security code (e.g. 8050)"
+                  value={securityCode}
+                  onChange={(e) => setSecurityCode(e.target.value)}
+                  required={role === 'admin'}
+                />
+              </div>
+            </div>
+          )}
 
           <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
             Access Portal <ChevronRight size={18} />
