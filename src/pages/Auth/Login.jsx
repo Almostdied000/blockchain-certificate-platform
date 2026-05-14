@@ -145,7 +145,7 @@ const Login = ({ setUser }) => {
                   type="password" 
                   className="input-field" 
                   style={{ paddingLeft: '3rem' }}
-                  placeholder="Enter security code (e.g. 8050)"
+                  placeholder="Enter security code"
                   value={securityCode}
                   onChange={(e) => setSecurityCode(e.target.value)}
                   required={role === 'admin'}
