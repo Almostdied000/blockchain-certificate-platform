@@ -4,6 +4,64 @@ const VERIFICATIONS_KEY = 'verifications';
 const USERS_KEY = 'users';
 const CURRENT_USER_KEY = 'currentUser';
 
+// Seed initial data if empty (for deployments like Vercel where localStorage starts blank)
+const initializeStorage = () => {
+  if (!localStorage.getItem(USERS_KEY)) {
+    localStorage.setItem(USERS_KEY, JSON.stringify([
+      {
+        id: "1",
+        name: "Admin User",
+        email: "admin@certichain.com",
+        password: "password123",
+        role: "admin"
+      },
+      {
+        id: "2",
+        name: "Dhanush Kumar",
+        email: "student@certichain.com",
+        password: "password123",
+        role: "student",
+        securityQuestion: "What city were you born in?",
+        securityAnswer: "chennai"
+      }
+    ]));
+  }
+  if (!localStorage.getItem(CERTS_KEY)) {
+    localStorage.setItem(CERTS_KEY, JSON.stringify([
+      {
+        id: "CERT-2026-0001",
+        certId: "CERT-2026-0001",
+        studentName: "Dhanush Kumar",
+        studentId: "STU-2026-001",
+        studentEmail: "student@certichain.com",
+        courseName: "Blockchain Technology & Smart Contracts",
+        issueDate: "2026-05-20",
+        grade: "A+",
+        template: "excellence",
+        txnHash: "0x7b9a12c4e68d90f12a34b56c78d90f1234a56b78c90de12f3456a78b90c12d34",
+        status: "verified",
+        createdAt: "2026-05-20T10:00:00.000Z"
+      },
+      {
+        id: "CERT-2026-0002",
+        certId: "CERT-2026-0002",
+        studentName: "Jane Doe",
+        studentId: "STU-2026-002",
+        studentEmail: "jane.doe@example.com",
+        courseName: "Introduction to Ethereum Development",
+        issueDate: "2026-05-22",
+        grade: "A",
+        template: "professional",
+        txnHash: "0x12a34b56c78d90f1234a56b78c90de12f3456a78b90c12d345678b90f12c34d5",
+        status: "verified",
+        createdAt: "2026-05-22T14:30:00.000Z"
+      }
+    ]));
+  }
+};
+
+initializeStorage();
+
 // Helper functions
 const getFromStorage = (key) => JSON.parse(localStorage.getItem(key) || '[]');
 const saveToStorage = (key, data) => localStorage.setItem(key, JSON.stringify(data));

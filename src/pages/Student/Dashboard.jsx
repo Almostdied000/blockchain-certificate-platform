@@ -215,7 +215,7 @@ const Dashboard = () => {
 
   const handleShare = async (cert) => {
     const canvas = getCertificateCanvas(cert);
-    const verificationUrl = window.location.origin + '/admin/verify?id=' + cert.id;
+    const verificationUrl = window.location.origin + '/verify?id=' + cert.id;
 
     try {
       // Convert canvas to blob then to file for sharing

@@ -205,7 +205,7 @@ const QRCodeViewer = () => {
 
             {/* Verify URL */}
             <div style={{ marginTop: '1.5rem', padding: '0.75rem', background: 'rgba(255,255,255,0.04)', borderRadius: '8px', wordBreak: 'break-all', fontSize: '0.65rem', fontFamily: 'monospace', color: 'var(--text-muted)' }}>
-              {window.location.origin}/admin/verify?id={selected.id}
+              {window.location.origin}/verify?id={selected.id}
             </div>
           </div>
         )}
