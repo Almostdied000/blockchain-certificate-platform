@@ -89,7 +89,7 @@ const CertificatePreview = ({ cert }) => {
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.4)',
+        boxShadow: '0 25px 50px rgba(0,0,0,0.5)',
         overflow: 'hidden',
         border: cert.template === 'minimal' ? 'none' : currentTheme.border,
         boxSizing: 'border-box',
@@ -254,8 +254,6 @@ const QRVerify = () => {
   const [inputId, setInputId] = useState('');
   const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
   const [certDetails, setCertDetails] = useState(null);
-  const [copiedId, setCopiedId] = useState(false);
-  const [copiedTx, setCopiedTx] = useState(false);
   const [shared, setShared] = useState(false);
 
   // Auto-verify if ?id= is present in URL (from QR scan)
@@ -298,17 +296,6 @@ const QRVerify = () => {
     setInputId('');
     setCertId('');
     navigate('/verify', { replace: true });
-  };
-
-  const handleCopyText = (text, type) => {
-    navigator.clipboard.writeText(text);
-    if (type === 'id') {
-      setCopiedId(true);
-      setTimeout(() => setCopiedId(false), 2000);
-    } else {
-      setCopiedTx(true);
-      setTimeout(() => setCopiedTx(false), 2000);
-    }
   };
 
   const handleShare = async () => {
@@ -500,14 +487,146 @@ const QRVerify = () => {
     link.click();
   };
 
-  const templateColors = {
-    professional: '#3b82f6',
-    academic: '#6366f1',
-    excellence: '#d97706',
-    minimal: '#0ea5e9',
-  };
-  const accentColor = certDetails ? templateColors[certDetails.template] || '#3b82f6' : '#3b82f6';
+  // ── 1. SUCCESS RENDER: Direct full-screen Certificate ──
+  if (status === 'success' && certDetails) {
+    return (
+      <div
+        style={{
+          minHeight: '100vh',
+          background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '2.5rem 1.5rem',
+          position: 'relative',
+          overflow: 'hidden',
+          boxSizing: 'border-box'
+        }}
+      >
+        {/* Animated background blobs */}
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+          <div style={{
+            position: 'absolute', width: 500, height: 500, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(59,130,246,0.1) 0%, transparent 70%)',
+            top: '-100px', left: '-100px',
+            animation: 'pulse 6s ease-in-out infinite',
+          }} />
+          <div style={{
+            position: 'absolute', width: 450, height: 450, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%)',
+            bottom: '-100px', right: '-100px',
+            animation: 'pulse 8s ease-in-out infinite reverse',
+          }} />
+        </div>
 
+        {/* Back to login */}
+        <button
+          onClick={() => navigate('/login')}
+          style={{
+            position: 'absolute', top: '1.5rem', left: '1.5rem',
+            background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)',
+            color: '#94a3b8', borderRadius: '10px', padding: '0.5rem 1rem',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.4rem',
+            fontSize: '0.85rem', transition: 'all 0.2s', zIndex: 10,
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = '#fff'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.05)'; e.currentTarget.style.color = '#94a3b8'; }}
+        >
+          <ArrowLeft size={16} /> Back to Login
+        </button>
+
+        {/* Certificate Display container */}
+        <div 
+          className="animate-fade-in"
+          style={{
+            width: '100%',
+            maxWidth: '820px',
+            position: 'relative',
+            zIndex: 2,
+            boxSizing: 'border-box'
+          }}
+        >
+          <CertificatePreview cert={{
+            id: certDetails.id || certDetails.certId,
+            course: certDetails.courseName,
+            studentName: certDetails.studentName,
+            date: certDetails.issueDate,
+            grade: certDetails.grade,
+            template: certDetails.template || 'professional'
+          }} />
+        </div>
+
+        {/* Action Controls & Verification Info beneath Certificate */}
+        <div 
+          className="animate-fade-in"
+          style={{ 
+            display: 'flex', 
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '1.5rem',
+            marginTop: '2.5rem',
+            position: 'relative',
+            zIndex: 2,
+            width: '100%'
+          }}
+        >
+          {/* Action Buttons Row */}
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <button
+              onClick={handleDownload}
+              className="btn btn-primary"
+              style={{ padding: '0.8rem 1.8rem', fontSize: '0.9rem', minWidth: '180px' }}
+            >
+              <Download size={16} /> Download PNG
+            </button>
+            
+            <button
+              onClick={handleShare}
+              className="btn btn-secondary"
+              style={{ padding: '0.8rem 1.5rem', fontSize: '0.9rem', minWidth: '130px' }}
+            >
+              <Share2 size={16} /> {shared ? 'Link Copied!' : 'Share Link'}
+            </button>
+
+            <button
+              onClick={resetVerification}
+              className="btn btn-secondary"
+              style={{ padding: '0.8rem 1.5rem', fontSize: '0.9rem', minWidth: '160px' }}
+            >
+              <RefreshCw size={16} /> Verify Another
+            </button>
+          </div>
+
+          {/* Verification Badge & Technical Details */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+            <div style={{ color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', fontWeight: 600 }}>
+              <CheckCircle size={16} /> Cryptographically Verified on CertiChain
+            </div>
+            <div style={{ display: 'flex', gap: '1rem', fontSize: '0.75rem', color: '#64748b', fontFamily: 'monospace' }}>
+              <span>ID: {certDetails.id}</span>
+              <span>•</span>
+              <span style={{ wordBreak: 'break-all', textAlign: 'center' }}>TX: {certDetails.txnHash}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Styles */}
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cookie&family=Cinzel:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
+          @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+          @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+          }
+          .animate-fade-in { animation: fadeIn 0.4s ease forwards; }
+          @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        `}</style>
+      </div>
+    );
+  }
+
+  // ── 2. SEARCH / LOADING / ERROR RENDER: Standard Verification Card ──
   return (
     <div
       style={{
@@ -520,6 +639,7 @@ const QRVerify = () => {
         padding: '2rem 1rem',
         position: 'relative',
         overflow: 'hidden',
+        boxSizing: 'border-box'
       }}
     >
       {/* Animated background blobs */}
@@ -554,87 +674,80 @@ const QRVerify = () => {
         <ArrowLeft size={16} /> Back to Login
       </button>
 
-      {/* Card Wrapper - stretches wide when certificate is loaded */}
+      {/* Card */}
       <div
         style={{
           width: '100%', 
-          maxWidth: status === 'success' ? 1040 : 520,
+          maxWidth: 520,
           background: 'rgba(255,255,255,0.04)',
           backdropFilter: 'blur(20px)',
           border: '1px solid rgba(255,255,255,0.10)',
           borderRadius: '24px',
-          padding: status === 'success' ? '2.5rem 2.5rem' : '2.5rem',
+          padding: '2.5rem',
           boxShadow: '0 25px 60px rgba(0,0,0,0.5)',
           position: 'relative', zIndex: 1,
-          transition: 'max-width 0.4s ease-in-out, padding 0.4s ease-in-out',
           boxSizing: 'border-box'
         }}
       >
-        {status !== 'success' && (
-          <>
-            {/* Logo */}
-            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-              <div style={{
-                width: 64, height: 64, borderRadius: '50%',
+        {/* Logo */}
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div style={{
+            width: 64, height: 64, borderRadius: '50%',
+            background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            margin: '0 auto 1rem',
+            boxShadow: '0 0 30px rgba(59,130,246,0.4)',
+          }}>
+            <Shield size={32} color="#fff" />
+          </div>
+          <h1 style={{
+            fontSize: '1.5rem', fontWeight: 800, color: '#f1f5f9',
+            background: 'linear-gradient(135deg, #60a5fa, #818cf8)',
+            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}>
+            CertiChain Verify
+          </h1>
+          <p style={{ color: '#64748b', fontSize: '0.875rem', marginTop: '0.4rem' }}>
+            Instant blockchain certificate verification
+          </p>
+        </div>
+
+        {/* Search form */}
+        <form onSubmit={handleSubmit} style={{ marginBottom: '1.75rem' }}>
+          <div style={{ position: 'relative' }}>
+            <input
+              type="text"
+              value={inputId}
+              onChange={e => setInputId(e.target.value)}
+              placeholder="Enter Certificate ID or Transaction Hash…"
+              style={{
+                width: '100%', padding: '0.9rem 3.2rem 0.9rem 1rem',
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.12)',
+                borderRadius: '12px', color: '#f1f5f9',
+                fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box',
+                transition: 'border-color 0.2s',
+              }}
+              onFocus={e => { e.target.style.borderColor = '#3b82f6'; }}
+              onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.12)'; }}
+            />
+            <button
+              type="submit"
+              style={{
+                position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)',
                 background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                margin: '0 auto 1rem',
-                boxShadow: '0 0 30px rgba(59,130,246,0.4)',
-              }}>
-                <Shield size={32} color="#fff" />
-              </div>
-              <h1 style={{
-                fontSize: '1.5rem', fontWeight: 800, color: '#f1f5f9',
-                background: 'linear-gradient(135deg, #60a5fa, #818cf8)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}>
-                CertiChain Verify
-              </h1>
-              <p style={{ color: '#64748b', fontSize: '0.875rem', marginTop: '0.4rem' }}>
-                Instant blockchain certificate verification
-              </p>
-            </div>
-
-            {/* Search form */}
-            <form onSubmit={handleSubmit} style={{ marginBottom: '1.75rem' }}>
-              <div style={{ position: 'relative' }}>
-                <input
-                  type="text"
-                  value={inputId}
-                  onChange={e => setInputId(e.target.value)}
-                  placeholder="Enter Certificate ID or Transaction Hash…"
-                  style={{
-                    width: '100%', padding: '0.9rem 3.2rem 0.9rem 1rem',
-                    background: 'rgba(255,255,255,0.06)',
-                    border: '1px solid rgba(255,255,255,0.12)',
-                    borderRadius: '12px', color: '#f1f5f9',
-                    fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box',
-                    transition: 'border-color 0.2s',
-                  }}
-                  onFocus={e => { e.target.style.borderColor = '#3b82f6'; }}
-                  onBlur={e => { e.target.style.borderColor = 'rgba(255,255,255,0.12)'; }}
-                />
-                <button
-                  type="submit"
-                  style={{
-                    position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)',
-                    background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
-                    border: 'none', borderRadius: '8px', padding: '0.5rem 0.9rem',
-                    color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem',
-                    fontSize: '0.8rem', fontWeight: 600, transition: 'opacity 0.2s',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.opacity = '0.85'; }}
-                  onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
-                >
-                  <Search size={14} /> Verify
-                </button>
-              </div>
-            </form>
-          </>
-        )}
-
-        {/* ── States ── */}
+                border: 'none', borderRadius: '8px', padding: '0.5rem 0.9rem',
+                color: '#fff', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '0.3rem',
+                fontSize: '0.8rem', fontWeight: 600, transition: 'opacity 0.2s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.opacity = '0.85'; }}
+              onMouseLeave={e => { e.currentTarget.style.opacity = '1'; }}
+            >
+              <Search size={14} /> Verify
+            </button>
+          </div>
+        </form>
 
         {/* Idle hint */}
         {status === 'idle' && (
@@ -691,147 +804,6 @@ const QRVerify = () => {
             </div>
           </div>
         )}
-
-        {/* Success - Dual Column Layout (Details/Actions Left + visual Certificate Right) */}
-        {status === 'success' && certDetails && (
-          <div 
-            className="animate-fade-in"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-              gap: '2.5rem',
-              alignItems: 'center',
-              width: '100%',
-              boxSizing: 'border-box'
-            }}
-          >
-            {/* Left side: Verification Details & Action panel */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              {/* Success Badge */}
-              <div
-                style={{
-                  background: 'rgba(16,185,129,0.08)',
-                  border: '1px solid rgba(16,185,129,0.25)',
-                  borderRadius: '16px', 
-                  padding: '1.25rem',
-                  display: 'flex', 
-                  gap: '0.75rem', 
-                  alignItems: 'center',
-                }}
-              >
-                <CheckCircle size={32} color="#10b981" style={{ flexShrink: 0 }} />
-                <div>
-                  <h3 style={{ color: '#10b981', fontSize: '1.1rem', fontWeight: 700, margin: 0 }}>
-                    Blockchain Verified
-                  </h3>
-                  <p style={{ color: '#94a3b8', fontSize: '0.8rem', margin: '2px 0 0 0' }}>
-                    Authentic credential retrieved successfully.
-                  </p>
-                </div>
-              </div>
-
-              {/* Technical Details Grid */}
-              <div 
-                style={{ 
-                  background: 'rgba(255,255,255,0.02)', 
-                  border: '1px solid rgba(255,255,255,0.06)',
-                  borderRadius: '16px', 
-                  padding: '1.25rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '1rem'
-                }}
-              >
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.2rem' }}>
-                    <span style={{ fontSize: '0.7rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Certificate ID</span>
-                    <button 
-                      onClick={() => handleCopyText(certDetails.id, 'id')}
-                      style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', gap: '3px', fontSize: '0.75rem' }}
-                    >
-                      {copiedId ? <Check size={12} color="#10b981" /> : <Copy size={12} />}
-                      {copiedId ? 'Copied' : 'Copy'}
-                    </button>
-                  </div>
-                  <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#f1f5f9', fontFamily: 'monospace' }}>{certDetails.id}</div>
-                </div>
-
-                <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.05)', margin: 0 }} />
-
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.2rem' }}>
-                    <span style={{ fontSize: '0.7rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Transaction Hash</span>
-                    <button 
-                      onClick={() => handleCopyText(certDetails.txnHash, 'tx')}
-                      style={{ background: 'none', border: 'none', color: '#3b82f6', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', gap: '3px', fontSize: '0.75rem' }}
-                    >
-                      {copiedTx ? <Check size={12} color="#10b981" /> : <Copy size={12} />}
-                      {copiedTx ? 'Copied' : 'Copy'}
-                    </button>
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: accentColor, fontFamily: 'monospace', wordBreak: 'break-all' }}>{certDetails.txnHash}</div>
-                </div>
-
-                <hr style={{ border: 'none', borderTop: '1px solid rgba(255,255,255,0.05)', margin: 0 }} />
-
-                {/* Additional Info */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                  <div>
-                    <span style={{ fontSize: '0.65rem', color: '#64748b', textTransform: 'uppercase', display: 'block' }}>Student ID</span>
-                    <span style={{ fontSize: '0.85rem', color: '#f1f5f9', fontWeight: 500 }}>{certDetails.studentId || 'N/A'}</span>
-                  </div>
-                  <div>
-                    <span style={{ fontSize: '0.65rem', color: '#64748b', textTransform: 'uppercase', display: 'block' }}>Status</span>
-                    <span style={{ fontSize: '0.85rem', color: '#10b981', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '3px' }}>
-                      <CheckCircle size={12} /> Active
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Action Buttons */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                <button
-                  onClick={handleDownload}
-                  className="btn btn-primary"
-                  style={{ width: '100%', padding: '0.8rem 1.2rem', fontSize: '0.9rem' }}
-                >
-                  <Download size={16} /> Download Certificate (PNG)
-                </button>
-                
-                <div style={{ display: 'flex', gap: '0.75rem' }}>
-                  <button
-                    onClick={handleShare}
-                    className="btn btn-secondary"
-                    style={{ flex: 1, padding: '0.75rem', fontSize: '0.85rem' }}
-                  >
-                    <Share2 size={15} /> {shared ? 'Link Copied!' : 'Share'}
-                  </button>
-
-                  <button
-                    onClick={resetVerification}
-                    className="btn btn-secondary"
-                    style={{ flex: 1, padding: '0.75rem', fontSize: '0.85rem' }}
-                  >
-                    <RefreshCw size={15} /> Verify Another
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            {/* Right side: HTML/CSS Certificate render */}
-            <div style={{ width: '100%' }}>
-              <CertificatePreview cert={{
-                id: certDetails.id || certDetails.certId,
-                course: certDetails.courseName,
-                studentName: certDetails.studentName,
-                date: certDetails.issueDate,
-                grade: certDetails.grade,
-                template: certDetails.template || 'professional'
-              }} />
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Footer */}
@@ -841,7 +813,6 @@ const QRVerify = () => {
 
       {/* Styles */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cookie&family=Cinzel:wght@600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap');
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes pulse {
           0%, 100% { opacity: 0.6; transform: scale(1); }
