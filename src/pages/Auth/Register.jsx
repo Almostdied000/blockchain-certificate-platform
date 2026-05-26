@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
-import { Shield, KeyRound, User, ChevronRight, Mail, UserPlus, Eye, EyeOff } from 'lucide-react';
+import { Shield, KeyRound, User, ChevronRight, Mail, UserPlus, Eye, EyeOff, HelpCircle } from 'lucide-react';
 import { registerUser } from '../../utils/storage';
 import { useNavigate, Link } from 'react-router-dom';
+
+const SECURITY_QUESTIONS = [
+  "What was the name of your first pet?",
+  "What is your mother's maiden name?",
+  "What city were you born in?",
+  "What was the name of your primary school?",
+  "What is your oldest sibling's middle name?",
+  "What was the make of your first car?",
+];
 
 const Register = () => {
   const [role, setRole] = useState('student');
@@ -9,7 +18,9 @@ const Register = () => {
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    securityQuestion: SECURITY_QUESTIONS[0],
+    securityAnswer: '',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -29,12 +40,19 @@ const Register = () => {
       return;
     }
 
+    if (role === 'student' && !formData.securityAnswer.trim()) {
+      setError('Please provide an answer to your security question.');
+      return;
+    }
+
     try {
       await registerUser({
         name: formData.name.trim(),
         email: formData.email.trim().toLowerCase(),
         password: formData.password.trim(),
-        role: role
+        role: role,
+        securityQuestion: role === 'student' ? formData.securityQuestion : undefined,
+        securityAnswer: role === 'student' ? formData.securityAnswer.trim().toLowerCase() : undefined,
       });
       navigate('/login');
     } catch (err) {
@@ -56,18 +74,18 @@ const Register = () => {
         </div>
 
         <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
-          <button 
-            type="button" 
+          <button
+            type="button"
             onClick={() => setRole('admin')}
-            className={`btn ${role === 'admin' ? 'btn-primary' : 'btn-secondary'}`} 
+            className={`btn ${role === 'admin' ? 'btn-primary' : 'btn-secondary'}`}
             style={{ flex: 1 }}
           >
             <Shield size={18} /> Admin
           </button>
-          <button 
-            type="button" 
+          <button
+            type="button"
             onClick={() => setRole('student')}
-            className={`btn ${role === 'student' ? 'btn-primary' : 'btn-secondary'}`} 
+            className={`btn ${role === 'student' ? 'btn-primary' : 'btn-secondary'}`}
             style={{ flex: 1 }}
           >
             <User size={18} /> Student
@@ -81,14 +99,15 @@ const Register = () => {
         )}
 
         <form onSubmit={handleRegister}>
+          {/* Full Name */}
           <div className="input-group">
             <label className="input-label">Full Name</label>
             <div style={{ position: 'relative' }}>
               <User size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-              <input 
-                type="text" 
+              <input
+                type="text"
                 name="name"
-                className="input-field" 
+                className="input-field"
                 style={{ paddingLeft: '3rem' }}
                 placeholder="John Doe"
                 onChange={handleChange}
@@ -97,14 +116,15 @@ const Register = () => {
             </div>
           </div>
 
+          {/* Email */}
           <div className="input-group">
             <label className="input-label">Email Address</label>
             <div style={{ position: 'relative' }}>
               <Mail size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-              <input 
-                type="email" 
+              <input
+                type="email"
                 name="email"
-                className="input-field" 
+                className="input-field"
                 style={{ paddingLeft: '3rem' }}
                 placeholder="john@example.com"
                 onChange={handleChange}
@@ -115,15 +135,16 @@ const Register = () => {
               />
             </div>
           </div>
-          
+
+          {/* Password */}
           <div className="input-group">
             <label className="input-label">Password</label>
             <div style={{ position: 'relative' }}>
               <KeyRound size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-              <input 
-                type={showPassword ? "text" : "password"} 
+              <input
+                type={showPassword ? 'text' : 'password'}
                 name="password"
-                className="input-field" 
+                className="input-field"
                 style={{ paddingLeft: '3rem', paddingRight: '3rem' }}
                 placeholder="••••••••"
                 onChange={handleChange}
@@ -132,33 +153,22 @@ const Register = () => {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                style={{
-                  position: 'absolute',
-                  right: '1rem',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--text-muted)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: 0
-                }}
+                style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}
               >
                 {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
           </div>
 
-          <div className="input-group" style={{ marginBottom: '2rem' }}>
+          {/* Confirm Password */}
+          <div className="input-group" style={{ marginBottom: role === 'student' ? '1.5rem' : '2rem' }}>
             <label className="input-label">Confirm Password</label>
             <div style={{ position: 'relative' }}>
               <KeyRound size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-              <input 
-                type={showConfirmPassword ? "text" : "password"} 
+              <input
+                type={showConfirmPassword ? 'text' : 'password'}
                 name="confirmPassword"
-                className="input-field" 
+                className="input-field"
                 style={{ paddingLeft: '3rem', paddingRight: '3rem' }}
                 placeholder="••••••••"
                 onChange={handleChange}
@@ -167,24 +177,71 @@ const Register = () => {
               <button
                 type="button"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                style={{
-                  position: 'absolute',
-                  right: '1rem',
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  background: 'none',
-                  border: 'none',
-                  color: 'var(--text-muted)',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: 0
-                }}
+                style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: 0 }}
               >
                 {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
               </button>
             </div>
           </div>
+
+          {/* Security Question — students only */}
+          {role === 'student' && (
+            <div
+              style={{
+                background: 'rgba(59,130,246,0.06)',
+                border: '1px solid rgba(59,130,246,0.2)',
+                borderRadius: '12px',
+                padding: '1rem',
+                marginBottom: '2rem',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                <HelpCircle size={16} color="#3b82f6" />
+                <span style={{ fontSize: '0.8rem', color: '#3b82f6', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                  Password Recovery
+                </span>
+              </div>
+              <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.85rem' }}>
+                Choose a security question to recover your account if you forget your password.
+              </p>
+
+              {/* Dropdown */}
+              <div className="input-group" style={{ marginBottom: '0.75rem' }}>
+                <label className="input-label">Security Question</label>
+                <select
+                  name="securityQuestion"
+                  className="input-field"
+                  value={formData.securityQuestion}
+                  onChange={handleChange}
+                  required
+                  style={{ cursor: 'pointer' }}
+                >
+                  {SECURITY_QUESTIONS.map((q) => (
+                    <option key={q} value={q}>{q}</option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Answer */}
+              <div>
+                <label className="input-label">Your Answer</label>
+                <div style={{ position: 'relative' }}>
+                  <HelpCircle size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                  <input
+                    type="text"
+                    name="securityAnswer"
+                    className="input-field"
+                    style={{ paddingLeft: '3rem' }}
+                    placeholder="Your answer (case-insensitive)"
+                    value={formData.securityAnswer}
+                    onChange={handleChange}
+                    required={role === 'student'}
+                    autoComplete="off"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
 
           <button type="submit" className="btn btn-primary" style={{ width: '100%' }}>
             Create Account <ChevronRight size={18} />

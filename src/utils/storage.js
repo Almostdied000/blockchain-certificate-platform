@@ -118,6 +118,25 @@ export const registerUser = async (userData) => {
   return newUser;
 };
 
+export const getUserByEmail = async (email) => {
+  const users = getFromStorage(USERS_KEY);
+  return users.find(u => u.email.toLowerCase() === email.trim().toLowerCase()) || null;
+};
+
+export const resetPassword = async (email, securityAnswer, newPassword) => {
+  const users = getFromStorage(USERS_KEY);
+  const index = users.findIndex(u => u.email.toLowerCase() === email.trim().toLowerCase());
+  if (index === -1) return { success: false, error: 'No account found with that email.' };
+  const user = users[index];
+  if (!user.securityAnswer) return { success: false, error: 'This account has no security question set.' };
+  if (user.securityAnswer.trim().toLowerCase() !== securityAnswer.trim().toLowerCase()) {
+    return { success: false, error: 'Security answer is incorrect.' };
+  }
+  users[index] = { ...user, password: newPassword.trim() };
+  saveToStorage(USERS_KEY, users);
+  return { success: true };
+};
+
 export const loginUser = async (email, password) => {
   const users = getFromStorage(USERS_KEY);
   const user = users.find(u => u.email === email && u.password === password);

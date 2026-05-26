@@ -100,7 +100,7 @@ const Login = ({ setUser }) => {
             </div>
           </div>
           
-          <div className="input-group" style={{ marginBottom: '2rem' }}>
+          <div className="input-group" style={{ marginBottom: role === 'student' ? '0.5rem' : '2rem' }}>
             <label className="input-label">Password</label>
             <div style={{ position: 'relative' }}>
               <KeyRound size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
@@ -135,6 +135,25 @@ const Login = ({ setUser }) => {
               </button>
             </div>
           </div>
+
+          {role === 'student' && (
+            <div style={{ textAlign: 'right', marginBottom: '1.5rem', marginTop: '-0.25rem' }}>
+              <Link 
+                to="/forgot-password" 
+                style={{ 
+                  color: 'var(--accent-primary)', 
+                  fontSize: '0.825rem', 
+                  textDecoration: 'none',
+                  fontWeight: 500,
+                  transition: 'color 0.2s'
+                }}
+                onMouseOver={(e) => e.target.style.color = '#60a5fa'}
+                onMouseOut={(e) => e.target.style.color = 'var(--accent-primary)'}
+              >
+                Forgot Password?
+              </Link>
+            </div>
+          )}
 
           {role === 'admin' && (
             <div className="input-group" style={{ marginBottom: '2rem' }}>
