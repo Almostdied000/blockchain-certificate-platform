@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Download, Share2, Award, Lock, ShieldAlert, CheckCircle } from 'lucide-react';
+import { Download, Share2, Award, Lock, ShieldAlert, CheckCircle, QrCode, X } from 'lucide-react';
 import { getCertificates, getCurrentUser } from '../../utils/storage';
+import QRCodeDisplay from '../../components/QRCodeDisplay';
 
 const Dashboard = () => {
   const [certificates, setCertificates] = useState([]);
+  const [activeQR, setActiveQR] = useState(null); // certId whose QR panel is open
 
   useEffect(() => {
     const fetchData = async () => {
@@ -317,7 +319,44 @@ const Dashboard = () => {
                   {cert.status === 'pending' ? <Lock size={16} /> : <Share2 size={16} />}
                   {cert.status === 'pending' ? 'Locked' : 'Share'}
                 </button>
+                {/* QR Code button */}
+                <button
+                  onClick={() => setActiveQR(activeQR === cert.id ? null : cert.id)}
+                  className={`btn ${cert.status === 'pending' ? 'btn-disabled' : 'btn-secondary'}`}
+                  style={{ padding: '0.5rem', flex: 1 }}
+                  disabled={cert.status === 'pending'}
+                  title="View QR Code"
+                >
+                  {cert.status === 'pending' ? <Lock size={16} /> : <QrCode size={16} />}
+                  {cert.status === 'pending' ? 'Locked' : 'QR Code'}
+                </button>
               </div>
+
+              {/* QR Panel — slides open below the actions */}
+              {activeQR === cert.id && cert.status !== 'pending' && (
+                <div
+                  className="animate-fade-in"
+                  style={{
+                    marginTop: '1rem',
+                    paddingTop: '1rem',
+                    borderTop: '1px solid rgba(255,255,255,0.08)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                  }}
+                >
+                  <QRCodeDisplay
+                    certId={cert.id}
+                    size={150}
+                    color="#8b5cf6"
+                    showDownload
+                  />
+                  <p style={{ fontSize: '0.7rem', color: 'var(--text-muted)', textAlign: 'center' }}>
+                    Share this QR so employers can instantly verify your certificate.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         ))}

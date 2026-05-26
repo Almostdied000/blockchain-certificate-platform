@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FilePlus, Hash, CheckCircle, Copy, Check, Award } from 'lucide-react';
 import { saveCertificate } from '../../utils/storage';
+import QRCodeDisplay from '../../components/QRCodeDisplay';
 
 const IssueCertificate = () => {
   const [formData, setFormData] = useState({
@@ -84,6 +85,12 @@ const IssueCertificate = () => {
                   <span style={{ color: 'var(--text-muted)', fontSize: '0.75rem', textTransform: 'uppercase' }}>Transaction Hash</span>
                   <div style={{ fontFamily: 'monospace', fontSize: '0.8rem', wordBreak: 'break-all', opacity: 0.8 }}>{issuedCert?.txnHash}</div>
                 </div>
+              </div>
+
+              {/* QR Code section */}
+              <div style={{ marginBottom: '2rem' }}>
+                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '1rem' }}>Certificate QR Code</div>
+                <QRCodeDisplay certId={issuedCert?.id} size={160} showDownload />
               </div>
 
               <button onClick={() => setIsSuccess(false)} className="btn btn-secondary" style={{ width: '100%' }}>
@@ -228,27 +235,26 @@ const IssueCertificate = () => {
                   {formData.courseName || 'Course Name'}
                 </h3>
                 
-                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: 'auto' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: 'auto', alignItems: 'flex-end' }}>
                   <div style={{ textAlign: 'left' }}>
                     <div style={{ fontSize: '0.6rem', color: formData.template === 'minimal' ? '#475569' : '#64748b' }}>Date of Issue</div>
                     <div style={{ color: formData.template === 'minimal' ? '#ffffff' : '#0f172a', fontSize: '0.7rem', fontWeight: 600 }}>{formData.issueDate || '--'}</div>
                   </div>
-                  
-                  {formData.template !== 'minimal' && (
-                    <div style={{ 
-                      width: '45px', 
-                      height: '45px', 
-                      borderRadius: '50%', 
-                      background: `${templates.find(t => t.id === formData.template)?.color}15`,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      border: `1px solid ${templates.find(t => t.id === formData.template)?.color}44`
-                    }}>
-                      <Award size={20} color={templates.find(t => t.id === formData.template)?.color} />
+
+                  {/* Compact QR code embedded in certificate preview */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
+                    <div style={{ background: '#ffffff', padding: '3px', borderRadius: '3px' }}>
+                      <QRCodeDisplay
+                        certId={formData.studentName ? `PREVIEW-${formData.studentName.replace(/\s+/g,'-')}` : 'PREVIEW'}
+                        size={36}
+                        compact
+                        showDownload={false}
+                        color={templates.find(t => t.id === formData.template)?.color || '#3b82f6'}
+                      />
                     </div>
-                  )}
-                  
+                    <div style={{ fontSize: '0.45rem', color: formData.template === 'minimal' ? '#475569' : '#94a3b8' }}>Scan to Verify</div>
+                  </div>
+
                   <div style={{ textAlign: formData.template === 'minimal' ? 'left' : 'right' }}>
                     <div style={{ fontSize: '0.6rem', color: formData.template === 'minimal' ? '#475569' : '#64748b' }}>Grade Achieved</div>
                     <div style={{ color: formData.template === 'minimal' ? '#ffffff' : '#0f172a', fontSize: '0.7rem', fontWeight: 600 }}>{formData.grade || '--'}</div>

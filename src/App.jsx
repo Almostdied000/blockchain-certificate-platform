@@ -8,6 +8,7 @@ import AdminDashboard from './pages/Admin/Dashboard';
 import Students from './pages/Admin/Students';
 import IssueCertificate from './pages/Admin/IssueCertificate';
 import VerifyCertificate from './pages/Admin/VerifyCertificate';
+import QRCodeViewer from './pages/Admin/QRCodeViewer';
 import StudentDashboard from './pages/Student/Dashboard';
 import { getCurrentUser } from './utils/storage';
 import './App.css';
@@ -33,6 +34,7 @@ function App() {
           <Route path="students" element={<Students />} />
           <Route path="issue" element={<IssueCertificate />} />
           <Route path="verify" element={<VerifyCertificate />} />
+          <Route path="qr-codes" element={<QRCodeViewer />} />
         </Route>
 
         {/* Student Routes */}
