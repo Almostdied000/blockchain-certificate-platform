@@ -10,6 +10,8 @@ import IssueCertificate from './pages/Admin/IssueCertificate';
 import VerifyCertificate from './pages/Admin/VerifyCertificate';
 import QRCodeViewer from './pages/Admin/QRCodeViewer';
 import StudentDashboard from './pages/Student/Dashboard';
+import StudentQRCodes from './pages/Student/QRCodes';
+import QRVerify from './pages/Public/QRVerify';
 import { getCurrentUser } from './utils/storage';
 import './App.css';
 
@@ -28,6 +30,9 @@ function App() {
         <Route path="/login" element={<Login setUser={setUser} />} />
         <Route path="/register" element={<Register />} />
         
+        {/* Public QR Verification — accessible without login */}
+        <Route path="/verify" element={<QRVerify />} />
+
         {/* Admin / Verifier Routes */}
         <Route path="/admin" element={user && user.role === 'admin' ? <AdminLayout setUser={setUser} user={user} /> : <Navigate to="/login" />}>
           <Route index element={<AdminDashboard />} />
@@ -40,6 +45,7 @@ function App() {
         {/* Student Routes */}
         <Route path="/student" element={user && user.role === 'student' ? <StudentLayout setUser={setUser} user={user} /> : <Navigate to="/login" />}>
           <Route index element={<StudentDashboard />} />
+          <Route path="qr-codes" element={<StudentQRCodes />} />
         </Route>
       </Routes>
     </Router>

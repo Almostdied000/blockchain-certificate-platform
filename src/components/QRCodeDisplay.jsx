@@ -1,5 +1,6 @@
-import React, { useRef, useState } from 'react';
-import { QRCodeSVG, QRCodeCanvas } from 'qrcode.react';
+import React, { useState } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
+import QRCode from 'qrcode';
 import { Download, QrCode, CheckCircle } from 'lucide-react';
 
 /**
@@ -19,82 +20,91 @@ const QRCodeDisplay = ({
   showDownload = true,
   color = '#3b82f6',
 }) => {
-  const canvasRef = useRef(null);
   const [downloaded, setDownloaded] = useState(false);
+  const [downloading, setDownloading] = useState(false);
 
   // Build the verification URL that the QR encodes
-  const verifyUrl = `${window.location.origin}/admin/verify?id=${certId}`;
+  const verifyUrl = `${window.location.origin}/verify?id=${certId}`;
 
-  const handleDownloadQR = () => {
-    // Render a fresh off-screen canvas at high resolution for download
-    const offscreen = document.createElement('canvas');
-    const qrSize = 400;
-    offscreen.width = qrSize + 40;
-    offscreen.height = qrSize + 80;
+  const handleDownloadQR = async () => {
+    if (downloading) return;
+    setDownloading(true);
 
-    const ctx = offscreen.getContext('2d');
+    try {
+      const qrSize = 440;
+      const padding = 24;
+      const labelHeight = 70;
+      const canvasWidth = qrSize + padding * 2;
+      const canvasHeight = qrSize + padding * 2 + labelHeight;
 
-    // Background
-    ctx.fillStyle = '#0f172a';
-    ctx.fillRect(0, 0, offscreen.width, offscreen.height);
+      // Generate QR to offscreen canvas via qrcode library
+      const offscreen = document.createElement('canvas');
+      offscreen.width = canvasWidth;
+      offscreen.height = canvasHeight;
+      const ctx = offscreen.getContext('2d');
 
-    // Rounded rect border
-    ctx.strokeStyle = color;
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.roundRect(8, 8, offscreen.width - 16, offscreen.height - 16, 12);
-    ctx.stroke();
+      // Background
+      ctx.fillStyle = '#0f172a';
+      ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
-    // We need to draw the QRCode into canvas — use a temp hidden div trick
-    // with QRCodeCanvas directly
-    const tempDiv = document.createElement('div');
-    tempDiv.style.position = 'fixed';
-    tempDiv.style.left = '-9999px';
-    document.body.appendChild(tempDiv);
+      // Glow border
+      ctx.shadowColor = color;
+      ctx.shadowBlur = 18;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.roundRect(6, 6, canvasWidth - 12, canvasHeight - 12, 14);
+      ctx.stroke();
+      ctx.shadowBlur = 0;
 
-    import('qrcode').then((QRCode) => {
-      QRCode.toCanvas(
-        offscreen,
-        verifyUrl,
-        {
-          width: qrSize,
-          margin: 2,
-          color: {
-            dark: color,
-            light: '#0f172a',
-          },
-          errorCorrectionLevel: 'H',
-        },
-        () => {
-          document.body.removeChild(tempDiv);
+      // Draw QR onto a temp canvas first
+      const qrCanvas = document.createElement('canvas');
+      await QRCode.toCanvas(qrCanvas, verifyUrl, {
+        width: qrSize,
+        margin: 1,
+        color: { dark: color, light: '#ffffff' },
+        errorCorrectionLevel: 'H',
+      });
 
-          // Label text at bottom
-          ctx.fillStyle = '#94a3b8';
-          ctx.font = '14px monospace';
-          ctx.textAlign = 'center';
-          ctx.fillText('Scan to verify on CertiChain', offscreen.width / 2, qrSize + 30);
-          ctx.fillStyle = color;
-          ctx.font = 'bold 11px monospace';
-          ctx.fillText(certId, offscreen.width / 2, qrSize + 52);
+      // White background behind QR
+      ctx.fillStyle = '#ffffff';
+      roundRect(ctx, padding - 4, padding - 4, qrSize + 8, qrSize + 8, 10);
+      ctx.fill();
 
-          const link = document.createElement('a');
-          link.download = `QR-${certId}.png`;
-          link.href = offscreen.toDataURL('image/png');
-          link.click();
+      // Blit QR onto offscreen
+      ctx.drawImage(qrCanvas, padding, padding);
 
-          setDownloaded(true);
-          setTimeout(() => setDownloaded(false), 2500);
-        }
-      );
-    }).catch(() => {
-      // Fallback: just use the SVG approach and inform user
-      document.body.removeChild(tempDiv);
-      // Simple SVG-based download via the inline canvas
+      // Label section
+      const labelY = padding + qrSize + 14;
+      ctx.fillStyle = '#94a3b8';
+      ctx.font = '600 14px Inter, system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Scan to verify on CertiChain', canvasWidth / 2, labelY + 16);
+
+      ctx.fillStyle = color;
+      ctx.font = 'bold 12px "Courier New", monospace';
+      ctx.fillText(certId, canvasWidth / 2, labelY + 38);
+
+      // Download
+      const link = document.createElement('a');
+      link.download = `QR-${certId}.png`;
+      link.href = offscreen.toDataURL('image/png');
+      link.click();
+
+      setDownloaded(true);
+      setTimeout(() => {
+        setDownloaded(false);
+        setDownloading(false);
+      }, 2500);
+    } catch (err) {
+      console.error('QR download failed, falling back to SVG:', err);
+      setDownloading(false);
+      // SVG fallback
       const svgEl = document.getElementById(`qr-svg-${certId}`);
       if (svgEl) {
         const svgData = new XMLSerializer().serializeToString(svgEl);
-        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-        const url = URL.createObjectURL(svgBlob);
+        const blob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.download = `QR-${certId}.svg`;
         link.href = url;
@@ -103,10 +113,10 @@ const QRCodeDisplay = ({
         setDownloaded(true);
         setTimeout(() => setDownloaded(false), 2500);
       }
-    });
+    }
   };
 
-  // ── Compact mode: just the bare QR square (used inside certificate preview) ──
+  // ── Compact mode: bare QR square (used inside certificate cards) ──
   if (compact) {
     return (
       <div
@@ -179,7 +189,7 @@ const QRCodeDisplay = ({
           e.currentTarget.style.boxShadow = `0 0 30px ${color}15`;
         }}
       >
-        {/* Coloured frame around QR */}
+        {/* White frame around QR */}
         <div
           style={{
             padding: '8px',
@@ -228,6 +238,7 @@ const QRCodeDisplay = ({
       {showDownload && (
         <button
           onClick={handleDownloadQR}
+          disabled={downloading}
           className="btn btn-secondary"
           style={{
             width: '100%',
@@ -240,11 +251,17 @@ const QRCodeDisplay = ({
             color: downloaded ? 'var(--success)' : undefined,
             borderColor: downloaded ? 'var(--success)' : undefined,
             transition: 'all 0.3s',
+            opacity: downloading ? 0.7 : 1,
+            cursor: downloading ? 'not-allowed' : 'pointer',
           }}
         >
           {downloaded ? (
             <>
               <CheckCircle size={16} /> Downloaded!
+            </>
+          ) : downloading ? (
+            <>
+              <QrCode size={16} /> Generating…
             </>
           ) : (
             <>
@@ -256,5 +273,20 @@ const QRCodeDisplay = ({
     </div>
   );
 };
+
+// Helper: draw a rounded rectangle path
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
 
 export default QRCodeDisplay;

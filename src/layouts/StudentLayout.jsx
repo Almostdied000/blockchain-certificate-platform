@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, LogOut, GraduationCap } from 'lucide-react';
+import { LayoutDashboard, LogOut, GraduationCap, QrCode } from 'lucide-react';
 
 const StudentLayout = ({ setUser, user }) => {
   const navigate = useNavigate();
@@ -22,6 +22,9 @@ const StudentLayout = ({ setUser, user }) => {
         <nav className="nav-links">
           <NavLink to="/student" end className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
             <LayoutDashboard size={20} /> My Dashboard
+          </NavLink>
+          <NavLink to="/student/qr-codes" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <QrCode size={20} /> My QR Codes
           </NavLink>
         </nav>
 
