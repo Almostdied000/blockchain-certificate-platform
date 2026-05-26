@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FilePlus, Hash, CheckCircle, Copy, Check, Award } from 'lucide-react';
 import { saveCertificate } from '../../utils/storage';
-import QRCodeDisplay from '../../components/QRCodeDisplay';
 
 const IssueCertificate = () => {
   const [formData, setFormData] = useState({
@@ -87,10 +86,9 @@ const IssueCertificate = () => {
                 </div>
               </div>
 
-              {/* QR Code section */}
-              <div style={{ marginBottom: '2rem' }}>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '1rem' }}>Certificate QR Code</div>
-                <QRCodeDisplay certId={issuedCert?.id} size={160} showDownload />
+              {/* Public verification note */}
+              <div style={{ marginBottom: '2rem', padding: '1rem', background: 'rgba(59, 130, 246, 0.05)', border: '1px solid rgba(59, 130, 246, 0.15)', borderRadius: '10px', fontSize: '0.85rem', color: 'var(--text-secondary)', textAlign: 'center' }}>
+                You can share the Certificate ID with anyone to verify it on the public verification portal.
               </div>
 
               <button onClick={() => setIsSuccess(false)} className="btn btn-secondary" style={{ width: '100%' }}>
@@ -241,18 +239,22 @@ const IssueCertificate = () => {
                     <div style={{ color: formData.template === 'minimal' ? '#ffffff' : '#0f172a', fontSize: '0.7rem', fontWeight: 600 }}>{formData.issueDate || '--'}</div>
                   </div>
 
-                  {/* Compact QR code embedded in certificate preview */}
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
-                    <div style={{ background: '#ffffff', padding: '3px', borderRadius: '3px' }}>
-                      <QRCodeDisplay
-                        certId={formData.studentName ? `PREVIEW-${formData.studentName.replace(/\s+/g,'-')}` : 'PREVIEW'}
-                        size={36}
-                        compact
-                        showDownload={false}
-                        color={templates.find(t => t.id === formData.template)?.color || '#3b82f6'}
-                      />
+                  {/* Cryptographic verification badge */}
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                    <div style={{ 
+                      background: 'rgba(16, 185, 129, 0.1)', 
+                      color: '#10b981', 
+                      border: '1px solid rgba(16, 185, 129, 0.3)',
+                      borderRadius: '50%',
+                      width: '36px',
+                      height: '36px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}>
+                      <CheckCircle size={18} />
                     </div>
-                    <div style={{ fontSize: '0.45rem', color: formData.template === 'minimal' ? '#475569' : '#94a3b8' }}>Scan to Verify</div>
+                    <div style={{ fontSize: '0.45rem', color: '#10b981', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Verified</div>
                   </div>
 
                   <div style={{ textAlign: formData.template === 'minimal' ? 'left' : 'right' }}>

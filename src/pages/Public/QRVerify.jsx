@@ -11,7 +11,6 @@ import {
   Hash,
   ArrowLeft,
   Search,
-  QrCode,
   Loader,
   Download,
   Share2,
@@ -755,9 +754,9 @@ const QRVerify = () => {
             textAlign: 'center', padding: '2rem',
             color: '#475569', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.75rem',
           }}>
-            <QrCode size={48} color="#334155" />
+            <Shield size={48} color="#334155" />
             <p style={{ fontSize: '0.875rem' }}>
-              Scan a CertiChain QR code or enter a certificate ID above to verify authenticity.
+              Enter a certificate ID or Transaction Hash above to verify its authenticity.
             </p>
           </div>
         )}

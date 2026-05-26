@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, FileBadge, CheckCircle, LogOut, Shield, Users, QrCode } from 'lucide-react';
+import { LayoutDashboard, FileBadge, CheckCircle, LogOut, Shield, Users } from 'lucide-react';
 
 const AdminLayout = ({ setUser, user }) => {
   const navigate = useNavigate();
@@ -31,9 +31,6 @@ const AdminLayout = ({ setUser, user }) => {
           </NavLink>
           <NavLink to="/admin/verify" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
             <CheckCircle size={20} /> Verify Certificate
-          </NavLink>
-          <NavLink to="/admin/qr-codes" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
-            <QrCode size={20} /> QR Code Manager
           </NavLink>
         </nav>
 
