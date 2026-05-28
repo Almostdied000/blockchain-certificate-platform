@@ -1,10 +1,19 @@
 import React, { useState } from 'react';
 import { Shield, KeyRound, User, ChevronRight, Eye, EyeOff } from 'lucide-react';
 import { loginUser } from '../../utils/storage';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 const Login = ({ setUser }) => {
-  const [role, setRole] = useState('admin');
+  const location = useLocation();
+
+  const getInitialRole = () => {
+    const params = new URLSearchParams(location.search);
+    const r = params.get('role');
+    if (r === 'admin' || r === 'student') return r;
+    return 'admin';
+  };
+
+  const [role, setRole] = useState(getInitialRole());
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [securityCode, setSecurityCode] = useState('');
@@ -187,7 +196,7 @@ const Login = ({ setUser }) => {
         </form>
 
         <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-          Don't have an account? <Link to="/register" style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>Create One</Link>
+          Don't have an account? <Link to={`/register?role=${role}`} style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>Create One</Link>
         </div>
       </div>
     </div>

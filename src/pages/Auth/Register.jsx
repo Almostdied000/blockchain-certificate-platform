@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Shield, KeyRound, User, ChevronRight, Mail, UserPlus, Eye, EyeOff, HelpCircle } from 'lucide-react';
 import { registerUser } from '../../utils/storage';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 
 const SECURITY_QUESTIONS = [
   "What was the name of your first pet?",
@@ -13,7 +13,16 @@ const SECURITY_QUESTIONS = [
 ];
 
 const Register = () => {
-  const [role, setRole] = useState('student');
+  const location = useLocation();
+
+  const getInitialRole = () => {
+    const params = new URLSearchParams(location.search);
+    const r = params.get('role');
+    if (r === 'admin' || r === 'student') return r;
+    return 'student';
+  };
+
+  const [role, setRole] = useState(getInitialRole());
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -249,7 +258,7 @@ const Register = () => {
         </form>
 
         <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-          Already have an account? <Link to="/login" style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>Sign In</Link>
+          Already have an account? <Link to={`/login?role=${role}`} style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>Sign In</Link>
         </div>
       </div>
     </div>
