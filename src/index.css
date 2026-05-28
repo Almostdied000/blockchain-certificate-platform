@@ -290,3 +290,59 @@ button {
 .custom-table tr:last-child td {
   border-bottom: none;
 }
+
+/* Design Selector Grid & Buttons */
+.design-selector-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+}
+
+.design-selector-btn {
+  padding: 0.75rem 0.5rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 84px;
+  height: auto;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.design-selector-btn span.design-name {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.design-selector-btn span.design-icon {
+  font-size: 1.5rem;
+  transition: transform 0.2s ease;
+}
+
+.design-selector-btn:hover span.design-icon {
+  transform: scale(1.2);
+}
+
+@media (max-width: 1200px) {
+  .design-selector-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .design-selector-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+}
+

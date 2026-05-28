@@ -15,7 +15,7 @@ const IssueCertificate = () => {
 
   const templates = [
     { id: 'professional', name: 'Modern Pro', color: '#3b82f6', icon: '💎' },
-    { id: 'academic', name: 'Classic Uni', color: '#1e293b', icon: '🏛️' },
+    { id: 'academic', name: 'Classic Academic', color: '#84623e', icon: '🏛️' },
     { id: 'excellence', name: 'Gold Merit', color: '#d97706', icon: '🏆' },
     { id: 'minimal', name: 'Sleek Tech', color: '#0ea5e9', icon: '⚡' }
   ];
@@ -54,7 +54,7 @@ const IssueCertificate = () => {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '2rem', alignItems: 'start' }}>
         <div className="glass-panel" style={{ padding: '2rem' }}>
           {isSuccess ? (
             <div className="animate-fade-in" style={{ textAlign: 'center', padding: '2rem 0' }}>
@@ -134,24 +134,22 @@ const IssueCertificate = () => {
 
               <div className="input-group">
                 <label className="input-label">Select Certificate Design</label>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '0.5rem' }}>
+                <div className="design-selector-grid">
                   {templates.map(t => (
-                    <div 
+                    <button 
+                      type="button"
                       key={t.id}
                       onClick={() => setFormData({...formData, template: t.id})}
+                      className="design-selector-btn"
                       style={{ 
-                        padding: '0.5rem', 
-                        borderRadius: '8px', 
                         border: formData.template === t.id ? `2px solid ${t.color}` : '1px solid var(--border-strong)',
-                        background: formData.template === t.id ? `${t.color}10` : 'transparent',
-                        cursor: 'pointer',
-                        textAlign: 'center',
-                        transition: 'all 0.2s'
+                        background: formData.template === t.id ? `${t.color}15` : 'rgba(255,255,255,0.02)',
+                        boxShadow: formData.template === t.id ? `0 0 12px ${t.color}30` : 'none'
                       }}
                     >
-                      <div style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>{t.icon}</div>
-                      <div style={{ fontSize: '0.7rem', fontWeight: 600 }}>{t.name}</div>
-                    </div>
+                      <span className="design-icon">{t.icon}</span>
+                      <span className="design-name">{t.name}</span>
+                    </button>
                   ))}
                 </div>
               </div>
@@ -164,19 +162,19 @@ const IssueCertificate = () => {
         </div>
 
         {/* Live Preview */}
-        <div>
-          <div className="glass-panel" style={{ padding: '2.5rem', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.8) 100%)', border: '1px solid rgba(255,255,255,0.1)' }}>
-            <h3 style={{ color: 'var(--text-secondary)', marginBottom: '2rem', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.875rem' }}>Certificate Preview</h3>
-            
-            <div style={{ width: '100%', maxWidth: '460px' }}>
-              <CertificatePreview cert={{
-                studentName: formData.studentName || 'Student Name',
-                course: formData.courseName || 'Course Name',
-                date: formData.issueDate || 'YYYY-MM-DD',
-                grade: formData.grade || 'A+',
-                template: formData.template
-              }} />
-            </div>
+        <div className="glass-panel" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.8) 100%)', alignSelf: 'stretch' }}>
+          <h3 style={{ color: 'var(--text-secondary)', marginBottom: '1.5rem', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.875rem', alignSelf: 'flex-start', marginTop: 0 }}>
+            Certificate Preview
+          </h3>
+          
+          <div style={{ width: '100%', maxWidth: '460px', display: 'flex', justifyContent: 'center' }}>
+            <CertificatePreview cert={{
+              studentName: formData.studentName || 'Student Name',
+              course: formData.courseName || 'Course Name',
+              date: formData.issueDate || 'YYYY-MM-DD',
+              grade: formData.grade || 'A+',
+              template: formData.template
+            }} />
           </div>
         </div>
       </div>
