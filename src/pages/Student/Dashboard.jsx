@@ -175,7 +175,7 @@ const Dashboard = () => {
       borderGrad.addColorStop(1, '#aa7c11');
       
       ctx.strokeStyle = borderGrad;
-      ctx.lineWidth = 16;
+      ctx.lineWidth = 8;
       ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
 
       ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';

@@ -154,7 +154,7 @@ export const CertificatePreview = ({ cert }) => {
           titleColor: '#d4af37',
           subtitleColor: '#94a3b8',
           fontFamily: "'Cinzel', serif",
-          border: '1.4cqw solid #d4af37',
+          border: '0.7cqw solid #d4af37',
           innerBorder: '0.12cqw solid rgba(212, 175, 55, 0.3)',
           watermark: 'rgba(212, 175, 55, 0.02)'
         };
@@ -617,7 +617,7 @@ const QRVerify = () => {
       borderGrad.addColorStop(1, '#aa7c11');
       
       ctx.strokeStyle = borderGrad;
-      ctx.lineWidth = 16;
+      ctx.lineWidth = 8;
       ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
 
       ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
