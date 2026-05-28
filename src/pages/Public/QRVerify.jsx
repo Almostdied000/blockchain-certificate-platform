@@ -23,6 +23,116 @@ import { verifyCertificate } from '../../utils/storage';
 /**
  * CertificatePreview — Renders a high-fidelity CSS replica of the certificate templates.
  */
+/**
+ * PremiumBadge — Renders a custom gold foil seal with hanging ribbons or holographic secure chip.
+ */
+const PremiumBadge = ({ template }) => {
+  const isMinimal = template === 'minimal';
+  const isAcademic = template === 'academic';
+  const isExcellence = template === 'excellence';
+
+  const ribbonColorL = isAcademic ? 'linear-gradient(135deg, #b91c1c, #7f1d1d)' : 'linear-gradient(135deg, #f59e0b, #b45309)';
+  const ribbonColorR = isAcademic ? 'linear-gradient(135deg, #dc2626, #991b1b)' : 'linear-gradient(135deg, #fbbf24, #d97706)';
+
+  if (isMinimal) {
+    return (
+      <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <div style={{
+          width: '54px',
+          height: '54px',
+          background: 'linear-gradient(135deg, #090d16 0%, #1e293b 100%)',
+          border: '2px dashed #38bdf8',
+          borderRadius: '12px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          boxShadow: '0 0 15px rgba(56, 189, 248, 0.35)',
+          position: 'relative',
+          zIndex: 2
+        }}>
+          <div style={{ position: 'absolute', inset: '4px', border: '1px solid rgba(56, 189, 248, 0.2)', borderRadius: '8px' }} />
+          <CheckCircle size={22} color="#38bdf8" />
+        </div>
+        <span style={{ fontSize: '0.5rem', color: '#38bdf8', marginTop: '6px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase' }}>
+          VERIFIED CHIP
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '80px', height: '75px' }}>
+      {/* Hanging Ribbons */}
+      <div style={{
+        position: 'absolute',
+        top: '25px',
+        left: '20px',
+        width: '16px',
+        height: '42px',
+        background: ribbonColorL,
+        transform: 'rotate(-10deg)',
+        clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 50% 80%, 0% 100%)',
+        zIndex: 1,
+        boxShadow: '0 3px 6px rgba(0,0,0,0.2)'
+      }} />
+      <div style={{
+        position: 'absolute',
+        top: '25px',
+        right: '20px',
+        width: '16px',
+        height: '42px',
+        background: ribbonColorR,
+        transform: 'rotate(10deg)',
+        clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 50% 80%, 0% 100%)',
+        zIndex: 1,
+        boxShadow: '0 3px 6px rgba(0,0,0,0.2)'
+      }} />
+
+      {/* Starburst Foil Badge */}
+      <div style={{
+        width: '52px',
+        height: '52px',
+        borderRadius: '50%',
+        background: isExcellence 
+          ? 'radial-gradient(circle, #fff3b0 0%, #d4af37 60%, #aa7c11 100%)'
+          : isAcademic
+          ? 'radial-gradient(circle, #fffae6 0%, #e5c158 60%, #b89127 100%)'
+          : 'radial-gradient(circle, #60a5fa 0%, #1e3a8a 80%, #0f172a 100%)',
+        border: '2px solid rgba(255, 255, 255, 0.4)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+        position: 'relative',
+        zIndex: 2,
+        outline: isExcellence || isAcademic ? '2px solid #d4af37' : '2px solid #1e3a8a',
+        outlineOffset: '-4px'
+      }}>
+        {/* Inner dashed detail */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          borderRadius: '50%',
+          border: '1px dashed rgba(255,255,255,0.7)',
+          zIndex: 2
+        }} />
+        <CheckCircle size={22} color="#ffffff" style={{ zIndex: 3 }} />
+      </div>
+      <span style={{ 
+        fontSize: '0.45rem', 
+        color: isExcellence ? '#d4af37' : isAcademic ? '#84623e' : '#4b5563', 
+        marginTop: '6px', 
+        fontWeight: 800, 
+        letterSpacing: '1px', 
+        textTransform: 'uppercase',
+        zIndex: 3
+      }}>
+        VERIFIED SEAL
+      </span>
+    </div>
+  );
+};
+
 const CertificatePreview = ({ cert }) => {
   const getTemplateStyles = () => {
     switch (cert.template) {
@@ -35,7 +145,6 @@ const CertificatePreview = ({ cert }) => {
           fontFamily: "'Playfair Display', Georgia, serif",
           border: '10px double #84623e',
           innerBorder: '2px solid rgba(132, 98, 62, 0.2)',
-          sealBg: 'linear-gradient(135deg, #d4af37, #aa7c11)',
           watermark: 'rgba(132, 98, 62, 0.03)'
         };
       case 'excellence':
@@ -47,7 +156,6 @@ const CertificatePreview = ({ cert }) => {
           fontFamily: "'Cinzel', serif",
           border: '12px solid #d4af37',
           innerBorder: '1px solid rgba(212, 175, 55, 0.3)',
-          sealBg: 'linear-gradient(135deg, #f3e5ab, #d4af37)',
           watermark: 'rgba(212, 175, 55, 0.02)'
         };
       case 'minimal':
@@ -59,7 +167,6 @@ const CertificatePreview = ({ cert }) => {
           fontFamily: "'Montserrat', sans-serif",
           border: '1px solid rgba(56, 189, 248, 0.2)',
           innerBorder: 'none',
-          sealBg: 'linear-gradient(135deg, #38bdf8, #818cf8)',
           watermark: 'rgba(56, 189, 248, 0.03)'
         };
       case 'professional':
@@ -72,7 +179,6 @@ const CertificatePreview = ({ cert }) => {
           fontFamily: "'Montserrat', sans-serif",
           border: '16px solid #0f172a',
           innerBorder: '1px solid #d4af37',
-          sealBg: 'linear-gradient(135deg, #1e3a8a, #3b82f6)',
           watermark: 'rgba(30, 58, 138, 0.02)'
         };
     }
@@ -80,7 +186,6 @@ const CertificatePreview = ({ cert }) => {
 
   const style = getTemplateStyles();
 
-  // Helper decoration elements
   const renderDecorations = () => {
     if (cert.template === 'academic') {
       return (
@@ -139,7 +244,6 @@ const CertificatePreview = ({ cert }) => {
         </>
       );
     }
-    // Professional geometric pattern
     return (
       <>
         {/* Subtle geometric lines */}
@@ -271,40 +375,8 @@ const CertificatePreview = ({ cert }) => {
             <div style={{ color: style.textColor, fontSize: '0.75rem', fontWeight: 600 }}>{cert.date}</div>
           </div>
 
-          {/* Secure Verification Stamp */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
-            <div style={{ 
-              width: '44px', 
-              height: '44px', 
-              borderRadius: '50%', 
-              background: style.sealBg,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 4px 10px rgba(0,0,0,0.25)',
-              zIndex: 2,
-              border: '2px solid rgba(255, 255, 255, 0.2)'
-            }}>
-              <CheckCircle size={22} color="#ffffff" />
-            </div>
-            {cert.template !== 'minimal' && (
-              <div style={{ 
-                position: 'absolute',
-                top: '20px',
-                width: '60px',
-                height: '35px',
-                background: 'rgba(255,255,255,0.08)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                backdropFilter: 'blur(4px)',
-                zIndex: 1,
-                borderRadius: '4px',
-                pointerEvents: 'none'
-              }} />
-            )}
-            <div style={{ fontSize: '0.5rem', color: style.subtitleColor, marginTop: '6px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 700 }}>
-              VERIFIED SEAL
-            </div>
-          </div>
+          {/* Secure Verification Stamp / Premium Badge */}
+          <PremiumBadge template={cert.template} />
 
           <div style={{ textAlign: cert.template === 'minimal' ? 'left' : 'right' }}>
             <div style={{ fontSize: '0.55rem', color: style.subtitleColor, textTransform: 'uppercase', letterSpacing: '1px' }}>Grade Achieved</div>
@@ -627,49 +699,141 @@ const QRVerify = () => {
     const sealX = canvas.width / 2;
     const sealY = 675;
 
-    // Draw Seal
     ctx.save();
     ctx.translate(sealX, sealY);
 
-    let sealGrad;
-    if (cert.template === 'excellence') {
-      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
-      sealGrad.addColorStop(0, '#f3e5ab');
-      sealGrad.addColorStop(1, '#d4af37');
-    } else if (cert.template === 'academic') {
-      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
-      sealGrad.addColorStop(0, '#d4af37');
-      sealGrad.addColorStop(1, '#aa7c11');
-    } else if (cert.template === 'minimal') {
-      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
-      sealGrad.addColorStop(0, '#38bdf8');
-      sealGrad.addColorStop(1, '#818cf8');
+    if (cert.template !== 'minimal') {
+      const isAcademic = cert.template === 'academic';
+      const ribbonColorL = isAcademic ? ['#b91c1c', '#7f1d1d'] : ['#f59e0b', '#b45309'];
+      const ribbonColorR = isAcademic ? ['#dc2626', '#991b1b'] : ['#fbbf24', '#d97706'];
+
+      // Left Ribbon
+      ctx.save();
+      ctx.rotate(-10 * Math.PI / 180);
+      const gradRibbonL = ctx.createLinearGradient(-12, 0, 12, 50);
+      gradRibbonL.addColorStop(0, ribbonColorL[0]);
+      gradRibbonL.addColorStop(1, ribbonColorL[1]);
+      ctx.fillStyle = gradRibbonL;
+      ctx.beginPath();
+      ctx.moveTo(-10, 15);
+      ctx.lineTo(10, 15);
+      ctx.lineTo(10, 60);
+      ctx.lineTo(0, 50);
+      ctx.lineTo(-10, 60);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      // Right Ribbon
+      ctx.save();
+      ctx.rotate(10 * Math.PI / 180);
+      const gradRibbonR = ctx.createLinearGradient(-12, 0, 12, 50);
+      gradRibbonR.addColorStop(0, ribbonColorR[0]);
+      gradRibbonR.addColorStop(1, ribbonColorR[1]);
+      ctx.fillStyle = gradRibbonR;
+      ctx.beginPath();
+      ctx.moveTo(-10, 15);
+      ctx.lineTo(10, 15);
+      ctx.lineTo(10, 60);
+      ctx.lineTo(0, 50);
+      ctx.lineTo(-10, 60);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      // Starburst Spikes (24-point star for foil seal look)
+      const spikes = 24;
+      const outerRadius = 32;
+      const innerRadius = 26;
+      let rot = Math.PI / 2 * 3;
+      const step = Math.PI / spikes;
+
+      let sealGrad;
+      if (cert.template === 'excellence') {
+        sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
+        sealGrad.addColorStop(0, '#fff3b0');
+        sealGrad.addColorStop(0.5, '#d4af37');
+        sealGrad.addColorStop(1, '#aa7c11');
+      } else if (cert.template === 'academic') {
+        sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
+        sealGrad.addColorStop(0, '#fffae6');
+        sealGrad.addColorStop(0.5, '#e5c158');
+        sealGrad.addColorStop(1, '#b89127');
+      } else {
+        sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
+        sealGrad.addColorStop(0, '#3b82f6');
+        sealGrad.addColorStop(0.5, '#1e3a8a');
+        sealGrad.addColorStop(1, '#0f172a');
+      }
+
+      ctx.fillStyle = sealGrad;
+      ctx.beginPath();
+      ctx.moveTo(0, -outerRadius);
+      for (let i = 0; i < spikes; i++) {
+        let x = Math.cos(rot) * outerRadius;
+        let y = Math.sin(rot) * outerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+
+        x = Math.cos(rot) * innerRadius;
+        y = Math.sin(rot) * innerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+      }
+      ctx.closePath();
+      ctx.fill();
+
+      // Inner dashed circle details
+      ctx.beginPath();
+      ctx.arc(0, 0, 22, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]); // Reset line dash
+
+      // Checkmark symbol inside
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 22px sans-serif';
+      ctx.fillText('✓', 0, 7);
+
     } else {
-      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
-      sealGrad.addColorStop(0, '#1e3a8a');
-      sealGrad.addColorStop(1, '#3b82f6');
+      // Minimal Holographic secure chip
+      const sealGrad = ctx.createLinearGradient(-25, -25, 25, 25);
+      sealGrad.addColorStop(0, '#090d16');
+      sealGrad.addColorStop(1, '#1e293b');
+      
+      ctx.fillStyle = sealGrad;
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(-25, -25, 50, 50, 8);
+      } else {
+        ctx.rect(-25, -25, 50, 50);
+      }
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(-18, -18, 36, 36);
+
+      // Checkmark inside chip
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 20px sans-serif';
+      ctx.fillText('✓', 0, 7);
     }
 
-    ctx.beginPath();
-    ctx.arc(0, 0, 30, 0, Math.PI * 2);
-    ctx.fillStyle = sealGrad;
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Checkmark inside seal
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 22px sans-serif';
-    ctx.fillText('✓', 0, 8);
     ctx.restore();
 
     // Seal text
     ctx.textAlign = 'center';
     ctx.fillStyle = theme.muted;
     ctx.font = `bold 12px ${theme.font}`;
-    ctx.fillText('VERIFIED SEAL', sealX, sealY + 48);
+    ctx.fillText(cert.template === 'minimal' ? 'VERIFIED CHIP' : 'VERIFIED SEAL', sealX, sealY + 48);
 
     // Left info (Date of Issue)
     ctx.textAlign = 'left';

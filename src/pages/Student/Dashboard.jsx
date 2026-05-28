@@ -261,49 +261,141 @@ const Dashboard = () => {
     const sealX = canvas.width / 2;
     const sealY = 675;
 
-    // Draw Seal
     ctx.save();
     ctx.translate(sealX, sealY);
 
-    let sealGrad;
-    if (cert.template === 'excellence') {
-      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
-      sealGrad.addColorStop(0, '#f3e5ab');
-      sealGrad.addColorStop(1, '#d4af37');
-    } else if (cert.template === 'academic') {
-      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
-      sealGrad.addColorStop(0, '#d4af37');
-      sealGrad.addColorStop(1, '#aa7c11');
-    } else if (cert.template === 'minimal') {
-      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
-      sealGrad.addColorStop(0, '#38bdf8');
-      sealGrad.addColorStop(1, '#818cf8');
+    if (cert.template !== 'minimal') {
+      const isAcademic = cert.template === 'academic';
+      const ribbonColorL = isAcademic ? ['#b91c1c', '#7f1d1d'] : ['#f59e0b', '#b45309'];
+      const ribbonColorR = isAcademic ? ['#dc2626', '#991b1b'] : ['#fbbf24', '#d97706'];
+
+      // Left Ribbon
+      ctx.save();
+      ctx.rotate(-10 * Math.PI / 180);
+      const gradRibbonL = ctx.createLinearGradient(-12, 0, 12, 50);
+      gradRibbonL.addColorStop(0, ribbonColorL[0]);
+      gradRibbonL.addColorStop(1, ribbonColorL[1]);
+      ctx.fillStyle = gradRibbonL;
+      ctx.beginPath();
+      ctx.moveTo(-10, 15);
+      ctx.lineTo(10, 15);
+      ctx.lineTo(10, 60);
+      ctx.lineTo(0, 50);
+      ctx.lineTo(-10, 60);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      // Right Ribbon
+      ctx.save();
+      ctx.rotate(10 * Math.PI / 180);
+      const gradRibbonR = ctx.createLinearGradient(-12, 0, 12, 50);
+      gradRibbonR.addColorStop(0, ribbonColorR[0]);
+      gradRibbonR.addColorStop(1, ribbonColorR[1]);
+      ctx.fillStyle = gradRibbonR;
+      ctx.beginPath();
+      ctx.moveTo(-10, 15);
+      ctx.lineTo(10, 15);
+      ctx.lineTo(10, 60);
+      ctx.lineTo(0, 50);
+      ctx.lineTo(-10, 60);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      // Starburst Spikes (24-point star for foil seal look)
+      const spikes = 24;
+      const outerRadius = 32;
+      const innerRadius = 26;
+      let rot = Math.PI / 2 * 3;
+      const step = Math.PI / spikes;
+
+      let sealGrad;
+      if (cert.template === 'excellence') {
+        sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
+        sealGrad.addColorStop(0, '#fff3b0');
+        sealGrad.addColorStop(0.5, '#d4af37');
+        sealGrad.addColorStop(1, '#aa7c11');
+      } else if (cert.template === 'academic') {
+        sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
+        sealGrad.addColorStop(0, '#fffae6');
+        sealGrad.addColorStop(0.5, '#e5c158');
+        sealGrad.addColorStop(1, '#b89127');
+      } else {
+        sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
+        sealGrad.addColorStop(0, '#3b82f6');
+        sealGrad.addColorStop(0.5, '#1e3a8a');
+        sealGrad.addColorStop(1, '#0f172a');
+      }
+
+      ctx.fillStyle = sealGrad;
+      ctx.beginPath();
+      ctx.moveTo(0, -outerRadius);
+      for (let i = 0; i < spikes; i++) {
+        let x = Math.cos(rot) * outerRadius;
+        let y = Math.sin(rot) * outerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+
+        x = Math.cos(rot) * innerRadius;
+        y = Math.sin(rot) * innerRadius;
+        ctx.lineTo(x, y);
+        rot += step;
+      }
+      ctx.closePath();
+      ctx.fill();
+
+      // Inner dashed circle details
+      ctx.beginPath();
+      ctx.arc(0, 0, 22, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.4)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([3, 3]);
+      ctx.stroke();
+      ctx.setLineDash([]); // Reset line dash
+
+      // Checkmark symbol inside
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 22px sans-serif';
+      ctx.fillText('✓', 0, 7);
+
     } else {
-      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
-      sealGrad.addColorStop(0, '#1e3a8a');
-      sealGrad.addColorStop(1, '#3b82f6');
+      // Minimal Holographic secure chip
+      const sealGrad = ctx.createLinearGradient(-25, -25, 25, 25);
+      sealGrad.addColorStop(0, '#090d16');
+      sealGrad.addColorStop(1, '#1e293b');
+      
+      ctx.fillStyle = sealGrad;
+      ctx.strokeStyle = '#38bdf8';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      if (ctx.roundRect) {
+        ctx.roundRect(-25, -25, 50, 50, 8);
+      } else {
+        ctx.rect(-25, -25, 50, 50);
+      }
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(-18, -18, 36, 36);
+
+      // Checkmark inside chip
+      ctx.textAlign = 'center';
+      ctx.fillStyle = '#38bdf8';
+      ctx.font = 'bold 20px sans-serif';
+      ctx.fillText('✓', 0, 7);
     }
 
-    ctx.beginPath();
-    ctx.arc(0, 0, 30, 0, Math.PI * 2);
-    ctx.fillStyle = sealGrad;
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-
-    // Checkmark inside seal
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#ffffff';
-    ctx.font = 'bold 22px sans-serif';
-    ctx.fillText('✓', 0, 8);
     ctx.restore();
 
     // Seal text
     ctx.textAlign = 'center';
     ctx.fillStyle = theme.muted;
     ctx.font = `bold 12px ${theme.font}`;
-    ctx.fillText('VERIFIED SEAL', sealX, sealY + 48);
+    ctx.fillText(cert.template === 'minimal' ? 'VERIFIED CHIP' : 'VERIFIED SEAL', sealX, sealY + 48);
 
     // Left info (Date of Issue)
     ctx.textAlign = 'left';
