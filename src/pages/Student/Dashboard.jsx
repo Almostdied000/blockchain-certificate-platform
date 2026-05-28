@@ -36,167 +36,298 @@ const Dashboard = () => {
     canvas.width = 1200;
     canvas.height = 850;
 
+    // Premium Themes Configuration for Canvas
     const themes = {
-      professional: { primary: '#3b82f6', secondary: '#1e40af', bg: '#ffffff', border: '#1e293b', font: 'sans-serif' },
-      academic: { primary: '#1e293b', secondary: '#0f172a', bg: '#fffdf9', border: '#1e293b', font: 'serif' },
-      excellence: { primary: '#d97706', secondary: '#92400e', bg: '#ffffff', border: '#d97706', font: 'serif' },
-      minimal: { primary: '#0ea5e9', secondary: '#0369a1', bg: '#0f172a', border: '#334155', font: 'sans-serif' }
+      professional: {
+        primary: '#1e3a8a',
+        secondary: '#3b82f6',
+        bg: '#ffffff',
+        border: '#0f172a',
+        gold: '#d4af37',
+        text: '#0f172a',
+        muted: '#4b5563',
+        font: 'Montserrat, Arial, sans-serif'
+      },
+      academic: {
+        primary: '#84623e',
+        secondary: '#aa7c11',
+        bg: '#faf6f0',
+        border: '#84623e',
+        gold: '#aa7c11',
+        text: '#2c2520',
+        muted: '#6e6259',
+        font: 'Georgia, serif'
+      },
+      excellence: {
+        primary: '#d4af37',
+        secondary: '#aa7c11',
+        bg: '#090a0f',
+        border: '#d4af37',
+        gold: '#d4af37',
+        text: '#f1f5f9',
+        muted: '#94a3b8',
+        font: 'Georgia, serif'
+      },
+      minimal: {
+        primary: '#38bdf8',
+        secondary: '#818cf8',
+        bg: '#020617',
+        border: '#0f172a',
+        gold: '#38bdf8',
+        text: '#f1f5f9',
+        muted: '#94a3b8',
+        font: 'Montserrat, Arial, sans-serif'
+      }
     };
+
     const theme = themes[cert.template] || themes.professional;
 
     // 1. Background
-    ctx.fillStyle = theme.bg;
+    if (cert.template === 'excellence') {
+      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grad.addColorStop(0, '#090a0f');
+      grad.addColorStop(1, '#171923');
+      ctx.fillStyle = grad;
+    } else if (cert.template === 'minimal') {
+      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grad.addColorStop(0, '#020617');
+      grad.addColorStop(1, '#0f172a');
+      ctx.fillStyle = grad;
+    } else {
+      ctx.fillStyle = theme.bg;
+    }
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // 2. Borders (Unique for each)
+    // 2. Watermarks / Background Patterns
     if (cert.template === 'academic') {
-      ctx.strokeStyle = theme.primary;
-      ctx.lineWidth = 15;
-      ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
-      ctx.lineWidth = 2;
-      ctx.strokeRect(55, 55, canvas.width - 110, canvas.height - 110);
+      // Draw Crest Watermark
+      ctx.strokeStyle = 'rgba(132, 98, 62, 0.08)';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, 160, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, 140, 0, Math.PI * 2);
+      ctx.stroke();
     } else if (cert.template === 'excellence') {
-      // Gold Ornamental Border
-      ctx.strokeStyle = theme.primary;
-      ctx.lineWidth = 30;
-      ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(55, 55, canvas.width - 110, canvas.height - 110);
+      // Draw Glowing Radial lines
+      ctx.fillStyle = 'rgba(212, 175, 55, 0.02)';
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, 300, 0, Math.PI * 2);
+      ctx.fill();
     } else if (cert.template === 'minimal') {
-      // Sleek side bar instead of full border
-      ctx.fillStyle = theme.primary;
-      ctx.fillRect(0, 0, 80, canvas.height);
+      // Draw technical grid
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.04)';
+      ctx.lineWidth = 1;
+      const gridSize = 30;
+      for (let x = 0; x < canvas.width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
     } else {
-      // Standard Pro Border
+      // Professional geometric background lines
+      ctx.strokeStyle = 'rgba(30, 58, 138, 0.02)';
+      ctx.lineWidth = 10;
+      for (let i = 0; i < canvas.width + canvas.height; i += 80) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i - canvas.height, canvas.height);
+        ctx.stroke();
+      }
+    }
+
+    // 3. Borders & Corner Decorations
+    if (cert.template === 'academic') {
+      // Dual frame
+      ctx.strokeStyle = theme.primary;
+      ctx.lineWidth = 12;
+      ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+
+      ctx.strokeStyle = 'rgba(132, 98, 62, 0.4)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(50, 50, canvas.width - 100, canvas.height - 100);
+
+      // Decorative corner brackets
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = theme.primary;
+      // Top Left
+      ctx.beginPath(); ctx.moveTo(65, 95); ctx.lineTo(65, 65); ctx.lineTo(95, 65); ctx.stroke();
+      // Top Right
+      ctx.beginPath(); ctx.moveTo(canvas.width - 65, 95); ctx.lineTo(canvas.width - 65, 65); ctx.lineTo(canvas.width - 95, 65); ctx.stroke();
+      // Bottom Left
+      ctx.beginPath(); ctx.moveTo(65, canvas.height - 95); ctx.lineTo(65, canvas.height - 65); ctx.lineTo(95, canvas.height - 65); ctx.stroke();
+      // Bottom Right
+      ctx.beginPath(); ctx.moveTo(canvas.width - 65, canvas.height - 95); ctx.lineTo(canvas.width - 65, canvas.height - 65); ctx.lineTo(canvas.width - 95, canvas.height - 65); ctx.stroke();
+
+    } else if (cert.template === 'excellence') {
+      // Golden border frame (using gradient)
+      const borderGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      borderGrad.addColorStop(0, '#f3e5ab');
+      borderGrad.addColorStop(0.5, '#d4af37');
+      borderGrad.addColorStop(1, '#aa7c11');
+      
+      ctx.strokeStyle = borderGrad;
+      ctx.lineWidth = 16;
+      ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+
+      ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(45, 45, canvas.width - 90, canvas.height - 90);
+
+      // Gold corners
+      ctx.strokeStyle = '#d4af37';
+      ctx.lineWidth = 2;
+      // Top Left
+      ctx.strokeRect(55, 55, 20, 20);
+      // Top Right
+      ctx.strokeRect(canvas.width - 75, 55, 20, 20);
+      // Bottom Left
+      ctx.strokeRect(55, canvas.height - 75, 20, 20);
+      // Bottom Right
+      ctx.strokeRect(canvas.width - 75, canvas.height - 75, 20, 20);
+
+    } else if (cert.template === 'minimal') {
+      // Thin glowing border
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+      // Modern side accents
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(0, 0, 10, canvas.height);
+    } else {
+      // Professional solid thick border with gold thin inner border
       ctx.strokeStyle = theme.border;
       ctx.lineWidth = 20;
-      ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
-      ctx.strokeStyle = theme.primary;
-      ctx.lineWidth = 4;
-      ctx.strokeRect(65, 65, canvas.width - 130, canvas.height - 130);
+      ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+
+      ctx.strokeStyle = theme.gold;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(48, 48, canvas.width - 96, canvas.height - 96);
     }
 
-    // 3. Content Layout (Different for Minimal)
-    if (cert.template === 'minimal') {
-      ctx.textAlign = 'left';
-      const startX = 150;
+    // 4. Content Text
+    ctx.textAlign = cert.template === 'minimal' ? 'left' : 'center';
+    const alignX = cert.template === 'minimal' ? 120 : canvas.width / 2;
 
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 30px sans-serif';
-      ctx.fillText('CertiChain Verified', startX, 100);
+    // Header Title
+    ctx.fillStyle = theme.primary;
+    const title = cert.template === 'academic' ? 'DIPLOMA OF COMPLETION' :
+                  cert.template === 'excellence' ? 'CERTIFICATE OF EXCELLENCE' : 
+                  cert.template === 'minimal' ? 'CERTIFICATE OF MASTERY' : 'CERTIFICATE OF ACHIEVEMENT';
+    ctx.font = `bold ${cert.template === 'excellence' ? '54px' : '48px'} ${theme.font}`;
+    ctx.fillText(title, alignX, 190);
 
-      ctx.fillStyle = theme.primary;
-      ctx.font = 'bold 80px sans-serif';
-      ctx.fillText('CERTIFICATE', startX, 220);
+    // Subtitle
+    ctx.fillStyle = theme.muted;
+    ctx.font = `500 20px ${theme.font}`;
+    const subtitle = cert.template === 'minimal' ? 'This digital credential confirms that' : 'This is to officially recognize that';
+    ctx.fillText(subtitle, alignX, 260);
 
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '24px sans-serif';
-      ctx.fillText('This digital asset confirms that', startX, 300);
+    // Student Name
+    ctx.fillStyle = cert.template === 'minimal' ? '#ffffff' : theme.text;
+    ctx.font = `bold 72px ${theme.font}`;
+    ctx.fillText(cert.studentName.toUpperCase(), alignX, 360);
 
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 70px sans-serif';
-      ctx.fillText(cert.studentName.toUpperCase(), startX, 400);
-
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '24px sans-serif';
-      ctx.fillText(`Successfully achieved mastery in ${cert.course}`, startX, 480);
-
-      ctx.fillStyle = theme.primary;
-      ctx.font = 'bold 30px sans-serif';
-      ctx.fillText(`GRADE: ${cert.grade}`, startX, 550);
-
-      ctx.fillStyle = '#475569';
-      ctx.font = '14px monospace';
-      ctx.fillText(`TXN: ${cert.id}`, startX, 780);
-      ctx.fillText(`DATE: ${cert.date}`, startX, 810);
-
-    } else {
-      // Centered Layouts (Pro, Academic, Excellence)
-      ctx.textAlign = 'center';
-
-      // Title
-      ctx.fillStyle = theme.primary;
-      ctx.font = `bold ${cert.template === 'excellence' ? '70px' : '60px'} ${theme.font}`;
-      const title = cert.template === 'academic' ? 'DIPLOMA OF COMPLETION' :
-        cert.template === 'excellence' ? 'CERTIFICATE OF EXCELLENCE' : 'CERTIFICATE OF ACHIEVEMENT';
-      ctx.fillText(title, canvas.width / 2, 180);
-
-      // Body Text
-      ctx.fillStyle = '#64748b';
-      ctx.font = `24px ${theme.font}`;
-      ctx.fillText('This is to officially recognize that', canvas.width / 2, 260);
-
-      // Student Name
-      ctx.fillStyle = '#0f172a';
-      ctx.font = `bold 85px ${theme.font}`;
-      ctx.fillText(cert.studentName.toUpperCase(), canvas.width / 2, 360);
-
-      // Underline
+    // Separator line
+    if (cert.template !== 'minimal') {
       ctx.beginPath();
-      ctx.moveTo(canvas.width / 2 - 350, 385);
-      ctx.lineTo(canvas.width / 2 + 350, 385);
+      ctx.moveTo(canvas.width / 2 - 300, 395);
+      ctx.lineTo(canvas.width / 2 + 300, 395);
       ctx.strokeStyle = theme.primary;
       ctx.lineWidth = 2;
       ctx.stroke();
-
-      // Program
-      ctx.fillStyle = '#64748b';
-      ctx.font = `24px ${theme.font}`;
-      ctx.fillText('for the successful completion of the program', canvas.width / 2, 460);
-
-      ctx.fillStyle = '#0f172a';
-      ctx.font = `bold 50px ${theme.font}`;
-      ctx.fillText(cert.course.toUpperCase(), canvas.width / 2, 530);
-
-      // Date & Grade
-      ctx.fillStyle = '#475569';
-      ctx.font = `italic 22px ${theme.font}`;
-      ctx.fillText(`Issued on ${cert.date} • Final Grade: ${cert.grade}`, canvas.width / 2, 600);
-
-      // ID
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '12px monospace';
-      ctx.fillText(`VERIFIED BLOCKCHAIN ID: ${cert.id}`, canvas.width / 2, 790);
     }
 
-    // 4. Seal/Signature Section (Common but theme-aware)
-    if (cert.template !== 'minimal') {
-      ctx.save();
-      ctx.translate(canvas.width / 2, 700);
+    // Tagline
+    ctx.fillStyle = theme.muted;
+    ctx.font = `20px ${theme.font}`;
+    const tagline = cert.template === 'minimal' ? 'Successfully completed and mastered the curriculum of' : 'for the successful completion of the program';
+    ctx.fillText(tagline, alignX, 450);
 
-      // Circular Seal
-      ctx.beginPath();
-      ctx.arc(0, 0, 60, 0, Math.PI * 2);
-      ctx.fillStyle = `${theme.primary}15`;
-      ctx.fill();
-      ctx.strokeStyle = theme.primary;
-      ctx.lineWidth = 1;
-      ctx.stroke();
+    // Course Name
+    ctx.fillStyle = cert.template === 'minimal' ? theme.primary : theme.text;
+    ctx.font = `bold 44px ${theme.font}`;
+    ctx.fillText(cert.course.toUpperCase(), alignX, 520);
 
-      // Logo Text
-      ctx.textAlign = 'center';
-      ctx.fillStyle = theme.primary;
-      ctx.font = 'bold 14px sans-serif';
-      ctx.fillText('CertiChain', 0, -12);
-      ctx.font = '7px sans-serif';
-      ctx.fillText('VERIFIED', 0, 24);
+    // 5. Seal & Signature Section (Bottom)
+    const sealX = canvas.width / 2;
+    const sealY = 675;
 
-      // Verified checkmark symbol instead of Dhanu
-      ctx.font = 'bold 28px sans-serif';
-      ctx.fillText('✓', 0, 8);
-      ctx.restore();
+    // Draw Seal
+    ctx.save();
+    ctx.translate(sealX, sealY);
+
+    let sealGrad;
+    if (cert.template === 'excellence') {
+      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
+      sealGrad.addColorStop(0, '#f3e5ab');
+      sealGrad.addColorStop(1, '#d4af37');
+    } else if (cert.template === 'academic') {
+      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
+      sealGrad.addColorStop(0, '#d4af37');
+      sealGrad.addColorStop(1, '#aa7c11');
+    } else if (cert.template === 'minimal') {
+      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
+      sealGrad.addColorStop(0, '#38bdf8');
+      sealGrad.addColorStop(1, '#818cf8');
     } else {
-      // Minimal Signature on Right
-      ctx.textAlign = 'right';
-      ctx.fillStyle = theme.primary;
-      ctx.font = 'bold 24px sans-serif';
-      ctx.fillText('✓ VERIFIED', canvas.width - 100, 750);
-      ctx.fillStyle = '#475569';
-      ctx.font = '12px sans-serif';
-      ctx.fillText('Authorized Signature', canvas.width - 100, 770);
+      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
+      sealGrad.addColorStop(0, '#1e3a8a');
+      sealGrad.addColorStop(1, '#3b82f6');
     }
+
+    ctx.beginPath();
+    ctx.arc(0, 0, 30, 0, Math.PI * 2);
+    ctx.fillStyle = sealGrad;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Checkmark inside seal
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 22px sans-serif';
+    ctx.fillText('✓', 0, 8);
+    ctx.restore();
+
+    // Seal text
+    ctx.textAlign = 'center';
+    ctx.fillStyle = theme.muted;
+    ctx.font = `bold 12px ${theme.font}`;
+    ctx.fillText('VERIFIED SEAL', sealX, sealY + 48);
+
+    // Left info (Date of Issue)
+    ctx.textAlign = 'left';
+    ctx.fillStyle = theme.muted;
+    ctx.font = `bold 12px ${theme.font}`;
+    ctx.fillText('DATE OF ISSUE', 120, sealY + 20);
+    ctx.fillStyle = cert.template === 'minimal' ? '#ffffff' : theme.text;
+    ctx.font = `bold 18px ${theme.font}`;
+    ctx.fillText(cert.date, 120, sealY + 45);
+
+    // Right info (Grade Achieved)
+    ctx.textAlign = 'right';
+    ctx.fillStyle = theme.muted;
+    ctx.font = `bold 12px ${theme.font}`;
+    ctx.fillText('GRADE ACHIEVED', canvas.width - 120, sealY + 20);
+    ctx.fillStyle = cert.template === 'minimal' ? '#ffffff' : theme.text;
+    ctx.font = `bold 18px ${theme.font}`;
+    ctx.fillText(cert.grade, canvas.width - 120, sealY + 45);
+
+    // Blockchain Verification ID (Center Bottom Footer)
+    ctx.textAlign = 'center';
+    ctx.fillStyle = theme.muted;
+    ctx.font = '12px monospace';
+    ctx.fillText(`VERIFIED BLOCKCHAIN ID: ${cert.id}`, canvas.width / 2, 795);
 
     return canvas;
   };

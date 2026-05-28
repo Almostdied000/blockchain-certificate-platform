@@ -24,160 +24,237 @@ import { verifyCertificate } from '../../utils/storage';
  * CertificatePreview — Renders a high-fidelity CSS replica of the certificate templates.
  */
 const CertificatePreview = ({ cert }) => {
-  const themes = {
-    professional: {
-      color: '#3b82f6',
-      bg: '#ffffff',
-      text: '#0f172a',
-      muted: '#64748b',
-      border: '12px solid #1e293b',
-      innerBorder: '2px solid #e2e8f0',
-      title: 'Certificate of Achievement',
-      subtitle: 'This is to officially recognize that',
-      tagline: 'for the successful completion of the program',
-      font: 'sans-serif'
-    },
-    academic: {
-      color: '#6366f1',
-      bg: '#fffdf9',
-      text: '#1e293b',
-      muted: '#64748b',
-      border: '12px double #1e293b',
-      innerBorder: 'none',
-      title: 'Diploma of Completion',
-      subtitle: 'This is to officially recognize that',
-      tagline: 'for the successful completion of the program',
-      font: 'serif'
-    },
-    excellence: {
-      color: '#d97706',
-      bg: '#ffffff',
-      text: '#0f172a',
-      muted: '#64748b',
-      border: '14px solid #d97706',
-      innerBorder: 'none',
-      title: 'Certificate of Excellence',
-      subtitle: 'This is to officially recognize that',
-      tagline: 'for the successful completion of the program',
-      font: 'serif'
-    },
-    minimal: {
-      color: '#0ea5e9',
-      bg: '#0f172a',
-      text: '#ffffff',
-      muted: '#94a3b8',
-      border: 'none',
-      innerBorder: 'none',
-      title: 'Certificate of Mastery',
-      subtitle: 'This digital asset confirms that',
-      tagline: 'Successfully achieved mastery in',
-      font: 'sans-serif'
+  const getTemplateStyles = () => {
+    switch (cert.template) {
+      case 'academic':
+        return {
+          bg: '#faf6f0',
+          textColor: '#2c2520',
+          titleColor: '#84623e',
+          subtitleColor: '#6e6259',
+          fontFamily: "'Playfair Display', Georgia, serif",
+          border: '10px double #84623e',
+          innerBorder: '2px solid rgba(132, 98, 62, 0.2)',
+          sealBg: 'linear-gradient(135deg, #d4af37, #aa7c11)',
+          watermark: 'rgba(132, 98, 62, 0.03)'
+        };
+      case 'excellence':
+        return {
+          bg: 'linear-gradient(135deg, #090a0f 0%, #171923 100%)',
+          textColor: '#f1f5f9',
+          titleColor: '#d4af37',
+          subtitleColor: '#94a3b8',
+          fontFamily: "'Cinzel', serif",
+          border: '12px solid #d4af37',
+          innerBorder: '1px solid rgba(212, 175, 55, 0.3)',
+          sealBg: 'linear-gradient(135deg, #f3e5ab, #d4af37)',
+          watermark: 'rgba(212, 175, 55, 0.02)'
+        };
+      case 'minimal':
+        return {
+          bg: 'linear-gradient(135deg, #020617 0%, #0f172a 100%)',
+          textColor: '#f1f5f9',
+          titleColor: '#38bdf8',
+          subtitleColor: '#94a3b8',
+          fontFamily: "'Montserrat', sans-serif",
+          border: '1px solid rgba(56, 189, 248, 0.2)',
+          innerBorder: 'none',
+          sealBg: 'linear-gradient(135deg, #38bdf8, #818cf8)',
+          watermark: 'rgba(56, 189, 248, 0.03)'
+        };
+      case 'professional':
+      default:
+        return {
+          bg: '#ffffff',
+          textColor: '#0f172a',
+          titleColor: '#1e3a8a',
+          subtitleColor: '#4b5563',
+          fontFamily: "'Montserrat', sans-serif",
+          border: '16px solid #0f172a',
+          innerBorder: '1px solid #d4af37',
+          sealBg: 'linear-gradient(135deg, #1e3a8a, #3b82f6)',
+          watermark: 'rgba(30, 58, 138, 0.02)'
+        };
     }
   };
 
-  const currentTheme = themes[cert.template] || themes.professional;
+  const style = getTemplateStyles();
+
+  // Helper decoration elements
+  const renderDecorations = () => {
+    if (cert.template === 'academic') {
+      return (
+        <>
+          {/* Corner brackets */}
+          <div style={{ position: 'absolute', top: '15px', left: '15px', width: '30px', height: '30px', borderTop: '4px solid #84623e', borderLeft: '4px solid #84623e' }} />
+          <div style={{ position: 'absolute', top: '15px', right: '15px', width: '30px', height: '30px', borderTop: '4px solid #84623e', borderRight: '4px solid #84623e' }} />
+          <div style={{ position: 'absolute', bottom: '15px', left: '15px', width: '30px', height: '30px', borderBottom: '4px solid #84623e', borderLeft: '4px solid #84623e' }} />
+          <div style={{ position: 'absolute', bottom: '15px', right: '15px', width: '30px', height: '30px', borderBottom: '4px solid #84623e', borderRight: '4px solid #84623e' }} />
+          {/* Watermark Crest */}
+          <div style={{
+            position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+            width: '320px', height: '320px', pointerEvents: 'none', opacity: 0.08, zIndex: 0,
+            border: '8px double #84623e', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}>
+            <Award size={180} color="#84623e" />
+          </div>
+        </>
+      );
+    }
+    if (cert.template === 'excellence') {
+      return (
+        <>
+          {/* Glowing Radial Watermark */}
+          <div style={{
+            position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+            width: '500px', height: '500px', pointerEvents: 'none', zIndex: 0,
+            background: 'radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%)'
+          }} />
+          {/* Gold Corners */}
+          <div style={{ position: 'absolute', top: '10px', left: '10px', width: '20px', height: '20px', borderTop: '2px solid #d4af37', borderLeft: '2px solid #d4af37' }} />
+          <div style={{ position: 'absolute', top: '10px', right: '10px', width: '20px', height: '20px', borderTop: '2px solid #d4af37', borderRight: '2px solid #d4af37' }} />
+          <div style={{ position: 'absolute', bottom: '10px', left: '10px', width: '20px', height: '20px', borderBottom: '2px solid #d4af37', borderLeft: '2px solid #d4af37' }} />
+          <div style={{ position: 'absolute', bottom: '10px', right: '10px', width: '20px', height: '20px', borderBottom: '2px solid #d4af37', borderRight: '2px solid #d4af37' }} />
+        </>
+      );
+    }
+    if (cert.template === 'minimal') {
+      return (
+        <>
+          {/* Tech Grid Pattern */}
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.05, zIndex: 0,
+            backgroundImage: 'linear-gradient(rgba(56, 189, 248, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(56, 189, 248, 0.3) 1px, transparent 1px)',
+            backgroundSize: '20px 20px'
+          }} />
+          {/* Glowing Tech blobs */}
+          <div style={{
+            position: 'absolute', top: '-10%', right: '-10%', width: '300px', height: '300px',
+            background: 'radial-gradient(circle, rgba(129, 140, 248, 0.15) 0%, transparent 70%)', pointerEvents: 'none'
+          }} />
+          <div style={{
+            position: 'absolute', bottom: '-10%', left: '-10%', width: '300px', height: '300px',
+            background: 'radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%)', pointerEvents: 'none'
+          }} />
+        </>
+      );
+    }
+    // Professional geometric pattern
+    return (
+      <>
+        {/* Subtle geometric lines */}
+        <div style={{
+          position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.02, zIndex: 0,
+          backgroundImage: 'repeating-linear-gradient(45deg, #1e3a8a, #1e3a8a 10px, transparent 10px, transparent 20px)'
+        }} />
+        {/* Thin Gold Inner Border */}
+        <div style={{
+          position: 'absolute', inset: '8px', border: '1px solid #d4af37', pointerEvents: 'none'
+        }} />
+      </>
+    );
+  };
 
   return (
     <div 
       style={{
         width: '100%',
         aspectRatio: '1.414',
-        background: currentTheme.bg,
-        borderRadius: '12px',
-        padding: cert.template === 'minimal' ? '0' : '2rem',
+        background: style.bg,
+        borderRadius: '8px',
+        padding: '2.5rem',
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
-        boxShadow: '0 25px 50px rgba(0,0,0,0.5)',
+        boxShadow: '0 25px 60px rgba(0,0,0,0.6)',
         overflow: 'hidden',
-        border: cert.template === 'minimal' ? 'none' : currentTheme.border,
+        border: style.border,
         boxSizing: 'border-box',
+        color: style.textColor,
+        fontFamily: style.fontFamily
       }}
     >
-      {cert.template === 'minimal' && (
-        <div style={{
-          position: 'absolute',
-          left: 0,
-          top: 0,
-          bottom: 0,
-          width: '24px',
-          background: currentTheme.color
-        }} />
-      )}
-      
+      {renderDecorations()}
+
       <div 
         style={{
-          border: currentTheme.innerBorder,
+          border: style.innerBorder,
           width: '100%',
           height: '100%',
-          padding: cert.template === 'minimal' ? '3rem 4rem' : '1.5rem',
+          padding: '1.5rem',
           display: 'flex',
           flexDirection: 'column',
           alignItems: cert.template === 'minimal' ? 'flex-start' : 'center',
           justifyContent: 'center',
           textAlign: cert.template === 'minimal' ? 'left' : 'center',
           boxSizing: 'border-box',
+          position: 'relative',
+          zIndex: 1
         }}
       >
         {cert.template !== 'minimal' && (
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.5rem', color: currentTheme.color }}>
-            <Award size={36} />
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem', color: style.titleColor }}>
+            <Award size={48} />
           </div>
         )}
 
         <h2 style={{
-          color: currentTheme.color,
-          fontFamily: cert.template === 'academic' || cert.template === 'excellence' ? "'Playfair Display', Georgia, serif" : "var(--font-heading)",
-          fontSize: cert.template === 'minimal' ? 'clamp(1rem, 3.5vw, 1.8rem)' : 'clamp(0.9rem, 2.5vw, 1.3rem)',
+          color: style.titleColor,
+          fontSize: cert.template === 'excellence' ? 'clamp(1.1rem, 3.2vw, 1.8rem)' : 'clamp(0.9rem, 2.5vw, 1.4rem)',
           fontWeight: 800,
-          marginBottom: '0.75rem',
+          marginBottom: '0.5rem',
           textTransform: 'uppercase',
-          letterSpacing: '1.5px',
+          letterSpacing: '3px',
           marginTop: 0,
         }}>
-          {currentTheme.title}
+          {cert.template === 'academic' ? 'Diploma of Completion' :
+           cert.template === 'excellence' ? 'Certificate of Excellence' : 
+           cert.template === 'minimal' ? 'CERTIFICATE OF MASTERY' : 'Certificate of Achievement'}
         </h2>
         
         <p style={{ 
-          color: currentTheme.muted, 
-          fontSize: 'clamp(0.6rem, 1.5vw, 0.75rem)', 
-          marginBottom: '0.75rem',
+          color: style.subtitleColor, 
+          fontSize: 'clamp(0.65rem, 1.5vw, 0.85rem)', 
+          marginBottom: '1rem',
           fontWeight: 500,
           marginTop: 0,
+          letterSpacing: '1px'
         }}>
-          {currentTheme.subtitle}
+          {cert.template === 'minimal' ? 'This digital credential confirms that' : 'This is to officially recognize that'}
         </p>
         
         <h1 style={{
-          color: currentTheme.text,
-          fontFamily: cert.template === 'academic' || cert.template === 'excellence' ? "'Playfair Display', Georgia, serif" : "var(--font-heading)",
-          fontSize: cert.template === 'minimal' ? 'clamp(1.5rem, 5vw, 2.6rem)' : 'clamp(1.3rem, 4vw, 2.1rem)',
+          color: cert.template === 'minimal' ? '#ffffff' : style.textColor,
+          fontFamily: cert.template === 'academic' || cert.template === 'excellence' ? "'Cinzel', serif" : style.fontFamily,
+          fontSize: cert.template === 'minimal' ? 'clamp(1.5rem, 4.5vw, 2.4rem)' : 'clamp(1.5rem, 4.2vw, 2.2rem)',
           fontWeight: 700,
-          borderBottom: cert.template === 'minimal' ? 'none' : `1px solid ${currentTheme.color}55`,
-          paddingBottom: '0.25rem',
-          minWidth: cert.template === 'minimal' ? 'auto' : '220px',
+          borderBottom: cert.template === 'minimal' ? 'none' : `2px solid ${style.titleColor}33`,
+          paddingBottom: '0.5rem',
+          minWidth: cert.template === 'minimal' ? 'auto' : '280px',
           marginBottom: '1rem',
           display: 'inline-block',
           marginTop: 0,
+          letterSpacing: '1px'
         }}>
           {cert.studentName}
         </h1>
         
         <p style={{ 
-          color: currentTheme.muted, 
-          fontSize: 'clamp(0.6rem, 1.5vw, 0.75rem)', 
-          marginBottom: '0.5rem',
+          color: style.subtitleColor, 
+          fontSize: 'clamp(0.65rem, 1.5vw, 0.85rem)', 
+          marginBottom: '0.75rem',
           marginTop: 0,
         }}>
-          {currentTheme.tagline}
+          {cert.template === 'minimal' ? 'Successfully completed and mastered the curriculum of' : 'for the successful completion of the program'}
         </p>
         
         <h3 style={{ 
-          color: cert.template === 'minimal' ? currentTheme.color : currentTheme.text, 
-          fontSize: 'clamp(0.8rem, 2.5vw, 1.2rem)', 
-          marginBottom: '1.5rem', 
+          color: cert.template === 'minimal' ? style.titleColor : style.textColor, 
+          fontSize: 'clamp(0.9rem, 2.8vw, 1.4rem)', 
+          marginBottom: '2rem', 
           fontWeight: 700,
           marginTop: 0,
+          letterSpacing: '0.5px'
         }}>
           {cert.course}
         </h3>
@@ -190,54 +267,48 @@ const CertificatePreview = ({ cert }) => {
           alignItems: 'flex-end' 
         }}>
           <div style={{ textAlign: 'left' }}>
-            <div style={{ fontSize: '0.55rem', color: currentTheme.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Date of Issue</div>
-            <div style={{ color: currentTheme.text, fontSize: '0.7rem', fontWeight: 600 }}>{cert.date}</div>
+            <div style={{ fontSize: '0.55rem', color: style.subtitleColor, textTransform: 'uppercase', letterSpacing: '1px' }}>Date of Issue</div>
+            <div style={{ color: style.textColor, fontSize: '0.75rem', fontWeight: 600 }}>{cert.date}</div>
           </div>
 
-          {/* Signature and Seal */}
-          {cert.template !== 'minimal' ? (
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+          {/* Secure Verification Stamp */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
+            <div style={{ 
+              width: '44px', 
+              height: '44px', 
+              borderRadius: '50%', 
+              background: style.sealBg,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 4px 10px rgba(0,0,0,0.25)',
+              zIndex: 2,
+              border: '2px solid rgba(255, 255, 255, 0.2)'
+            }}>
+              <CheckCircle size={22} color="#ffffff" />
+            </div>
+            {cert.template !== 'minimal' && (
               <div style={{ 
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: currentTheme.color,
-                marginBottom: '4px',
-                zIndex: 1,
-                transform: 'translateY(2px)'
-              }}>
-                <CheckCircle size={24} />
-              </div>
-              <div style={{ 
-                width: '32px', 
-                height: '32px', 
-                borderRadius: '50%', 
-                border: `1px solid ${currentTheme.color}44`,
-                background: `${currentTheme.color}0a`,
                 position: 'absolute',
-                top: '-4px',
-                zIndex: 0,
-                opacity: 0.5
+                top: '20px',
+                width: '60px',
+                height: '35px',
+                background: 'rgba(255,255,255,0.08)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                backdropFilter: 'blur(4px)',
+                zIndex: 1,
+                borderRadius: '4px',
+                pointerEvents: 'none'
               }} />
-              <div style={{ fontSize: '0.5rem', color: currentTheme.muted, marginTop: '2px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                Authorized Seal
-              </div>
+            )}
+            <div style={{ fontSize: '0.5rem', color: style.subtitleColor, marginTop: '6px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 700 }}>
+              VERIFIED SEAL
             </div>
-          ) : (
-            <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-              <div style={{ 
-                color: currentTheme.color,
-                marginBottom: '4px'
-              }}>
-                <CheckCircle size={24} />
-              </div>
-              <div style={{ fontSize: '0.55rem', color: currentTheme.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Verified Signature</div>
-            </div>
-          )}
+          </div>
 
           <div style={{ textAlign: cert.template === 'minimal' ? 'left' : 'right' }}>
-            <div style={{ fontSize: '0.55rem', color: currentTheme.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Grade Achieved</div>
-            <div style={{ color: currentTheme.text, fontSize: '0.7rem', fontWeight: 600 }}>{cert.grade}</div>
+            <div style={{ fontSize: '0.55rem', color: style.subtitleColor, textTransform: 'uppercase', letterSpacing: '1px' }}>Grade Achieved</div>
+            <div style={{ color: style.textColor, fontSize: '0.75rem', fontWeight: 600 }}>{cert.grade}</div>
           </div>
         </div>
       </div>
@@ -331,152 +402,300 @@ const QRVerify = () => {
     canvas.width = 1200;
     canvas.height = 850;
 
+    // Premium Themes Configuration for Canvas
     const themes = {
-      professional: { primary: '#3b82f6', secondary: '#1e40af', bg: '#ffffff', border: '#1e293b', font: 'sans-serif' },
-      academic: { primary: '#1e293b', secondary: '#0f172a', bg: '#fffdf9', border: '#1e293b', font: 'serif' },
-      excellence: { primary: '#d97706', secondary: '#92400e', bg: '#ffffff', border: '#d97706', font: 'serif' },
-      minimal: { primary: '#0ea5e9', secondary: '#0369a1', bg: '#0f172a', border: '#334155', font: 'sans-serif' }
+      professional: {
+        primary: '#1e3a8a',
+        secondary: '#3b82f6',
+        bg: '#ffffff',
+        border: '#0f172a',
+        gold: '#d4af37',
+        text: '#0f172a',
+        muted: '#4b5563',
+        font: 'Montserrat, Arial, sans-serif'
+      },
+      academic: {
+        primary: '#84623e',
+        secondary: '#aa7c11',
+        bg: '#faf6f0',
+        border: '#84623e',
+        gold: '#aa7c11',
+        text: '#2c2520',
+        muted: '#6e6259',
+        font: 'Georgia, serif'
+      },
+      excellence: {
+        primary: '#d4af37',
+        secondary: '#aa7c11',
+        bg: '#090a0f',
+        border: '#d4af37',
+        gold: '#d4af37',
+        text: '#f1f5f9',
+        muted: '#94a3b8',
+        font: 'Georgia, serif'
+      },
+      minimal: {
+        primary: '#38bdf8',
+        secondary: '#818cf8',
+        bg: '#020617',
+        border: '#0f172a',
+        gold: '#38bdf8',
+        text: '#f1f5f9',
+        muted: '#94a3b8',
+        font: 'Montserrat, Arial, sans-serif'
+      }
     };
+
     const theme = themes[cert.template] || themes.professional;
 
     // 1. Background
-    ctx.fillStyle = theme.bg;
+    if (cert.template === 'excellence') {
+      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grad.addColorStop(0, '#090a0f');
+      grad.addColorStop(1, '#171923');
+      ctx.fillStyle = grad;
+    } else if (cert.template === 'minimal') {
+      const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      grad.addColorStop(0, '#020617');
+      grad.addColorStop(1, '#0f172a');
+      ctx.fillStyle = grad;
+    } else {
+      ctx.fillStyle = theme.bg;
+    }
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // 2. Borders
+    // 2. Watermarks / Background Patterns
     if (cert.template === 'academic') {
-      ctx.strokeStyle = theme.primary;
-      ctx.lineWidth = 15;
-      ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
-      ctx.lineWidth = 2;
-      ctx.strokeRect(55, 55, canvas.width - 110, canvas.height - 110);
+      // Draw Crest Watermark
+      ctx.strokeStyle = 'rgba(132, 98, 62, 0.08)';
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, 160, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, 140, 0, Math.PI * 2);
+      ctx.stroke();
     } else if (cert.template === 'excellence') {
-      ctx.strokeStyle = theme.primary;
-      ctx.lineWidth = 30;
-      ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
-      ctx.strokeStyle = '#ffffff';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(55, 55, canvas.width - 110, canvas.height - 110);
+      // Draw Glowing Radial lines
+      ctx.fillStyle = 'rgba(212, 175, 55, 0.02)';
+      ctx.beginPath();
+      ctx.arc(canvas.width / 2, canvas.height / 2, 300, 0, Math.PI * 2);
+      ctx.fill();
     } else if (cert.template === 'minimal') {
-      ctx.fillStyle = theme.primary;
-      ctx.fillRect(0, 0, 80, canvas.height);
+      // Draw technical grid
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.04)';
+      ctx.lineWidth = 1;
+      const gridSize = 30;
+      for (let x = 0; x < canvas.width; x += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvas.height);
+        ctx.stroke();
+      }
+      for (let y = 0; y < canvas.height; y += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(canvas.width, y);
+        ctx.stroke();
+      }
     } else {
+      // Professional geometric background lines
+      ctx.strokeStyle = 'rgba(30, 58, 138, 0.02)';
+      ctx.lineWidth = 10;
+      for (let i = 0; i < canvas.width + canvas.height; i += 80) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0);
+        ctx.lineTo(i - canvas.height, canvas.height);
+        ctx.stroke();
+      }
+    }
+
+    // 3. Borders & Corner Decorations
+    if (cert.template === 'academic') {
+      // Dual frame
+      ctx.strokeStyle = theme.primary;
+      ctx.lineWidth = 12;
+      ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+
+      ctx.strokeStyle = 'rgba(132, 98, 62, 0.4)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(50, 50, canvas.width - 100, canvas.height - 100);
+
+      // Decorative corner brackets
+      ctx.lineWidth = 4;
+      ctx.strokeStyle = theme.primary;
+      // Top Left
+      ctx.beginPath(); ctx.moveTo(65, 95); ctx.lineTo(65, 65); ctx.lineTo(95, 65); ctx.stroke();
+      // Top Right
+      ctx.beginPath(); ctx.moveTo(canvas.width - 65, 95); ctx.lineTo(canvas.width - 65, 65); ctx.lineTo(canvas.width - 95, 65); ctx.stroke();
+      // Bottom Left
+      ctx.beginPath(); ctx.moveTo(65, canvas.height - 95); ctx.lineTo(65, canvas.height - 65); ctx.lineTo(95, canvas.height - 65); ctx.stroke();
+      // Bottom Right
+      ctx.beginPath(); ctx.moveTo(canvas.width - 65, canvas.height - 95); ctx.lineTo(canvas.width - 65, canvas.height - 65); ctx.lineTo(canvas.width - 95, canvas.height - 65); ctx.stroke();
+
+    } else if (cert.template === 'excellence') {
+      // Golden border frame (using gradient)
+      const borderGrad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      borderGrad.addColorStop(0, '#f3e5ab');
+      borderGrad.addColorStop(0.5, '#d4af37');
+      borderGrad.addColorStop(1, '#aa7c11');
+      
+      ctx.strokeStyle = borderGrad;
+      ctx.lineWidth = 16;
+      ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+
+      ctx.strokeStyle = 'rgba(212, 175, 55, 0.3)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(45, 45, canvas.width - 90, canvas.height - 90);
+
+      // Gold corners
+      ctx.strokeStyle = '#d4af37';
+      ctx.lineWidth = 2;
+      // Top Left
+      ctx.strokeRect(55, 55, 20, 20);
+      // Top Right
+      ctx.strokeRect(canvas.width - 75, 55, 20, 20);
+      // Bottom Left
+      ctx.strokeRect(55, canvas.height - 75, 20, 20);
+      // Bottom Right
+      ctx.strokeRect(canvas.width - 75, canvas.height - 75, 20, 20);
+
+    } else if (cert.template === 'minimal') {
+      // Thin glowing border
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+      // Modern side accents
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillRect(0, 0, 10, canvas.height);
+    } else {
+      // Professional solid thick border with gold thin inner border
       ctx.strokeStyle = theme.border;
       ctx.lineWidth = 20;
-      ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
-      ctx.strokeStyle = theme.primary;
-      ctx.lineWidth = 4;
-      ctx.strokeRect(65, 65, canvas.width - 130, canvas.height - 130);
+      ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
+
+      ctx.strokeStyle = theme.gold;
+      ctx.lineWidth = 2;
+      ctx.strokeRect(48, 48, canvas.width - 96, canvas.height - 96);
     }
 
-    // 3. Content Layout
-    if (cert.template === 'minimal') {
-      ctx.textAlign = 'left';
-      const startX = 150;
+    // 4. Content Text
+    ctx.textAlign = cert.template === 'minimal' ? 'left' : 'center';
+    const alignX = cert.template === 'minimal' ? 120 : canvas.width / 2;
 
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 30px sans-serif';
-      ctx.fillText('CertiChain Verified', startX, 100);
+    // Header Title
+    ctx.fillStyle = theme.primary;
+    const title = cert.template === 'academic' ? 'DIPLOMA OF COMPLETION' :
+                  cert.template === 'excellence' ? 'CERTIFICATE OF EXCELLENCE' : 
+                  cert.template === 'minimal' ? 'CERTIFICATE OF MASTERY' : 'CERTIFICATE OF ACHIEVEMENT';
+    ctx.font = `bold ${cert.template === 'excellence' ? '54px' : '48px'} ${theme.font}`;
+    ctx.fillText(title, alignX, 190);
 
-      ctx.fillStyle = theme.primary;
-      ctx.font = 'bold 80px sans-serif';
-      ctx.fillText('CERTIFICATE', startX, 220);
+    // Subtitle
+    ctx.fillStyle = theme.muted;
+    ctx.font = `500 20px ${theme.font}`;
+    const subtitle = cert.template === 'minimal' ? 'This digital credential confirms that' : 'This is to officially recognize that';
+    ctx.fillText(subtitle, alignX, 260);
 
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '24px sans-serif';
-      ctx.fillText('This digital asset confirms that', startX, 300);
+    // Student Name
+    ctx.fillStyle = cert.template === 'minimal' ? '#ffffff' : theme.text;
+    ctx.font = `bold 72px ${theme.font}`;
+    ctx.fillText(cert.studentName.toUpperCase(), alignX, 360);
 
-      ctx.fillStyle = '#ffffff';
-      ctx.font = 'bold 70px sans-serif';
-      ctx.fillText(cert.studentName.toUpperCase(), startX, 400);
-
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '24px sans-serif';
-      ctx.fillText(`Successfully achieved mastery in ${cert.course}`, startX, 480);
-
-      ctx.fillStyle = theme.primary;
-      ctx.font = 'bold 30px sans-serif';
-      ctx.fillText(`GRADE: ${cert.grade}`, startX, 550);
-
-      ctx.fillStyle = '#475569';
-      ctx.font = '14px monospace';
-      ctx.fillText(`TXN: ${cert.id}`, startX, 780);
-      ctx.fillText(`DATE: ${cert.date}`, startX, 810);
-    } else {
-      ctx.textAlign = 'center';
-
-      ctx.fillStyle = theme.primary;
-      ctx.font = `bold ${cert.template === 'excellence' ? '70px' : '60px'} ${theme.font}`;
-      const title = cert.template === 'academic' ? 'DIPLOMA OF COMPLETION' :
-        cert.template === 'excellence' ? 'CERTIFICATE OF EXCELLENCE' : 'CERTIFICATE OF ACHIEVEMENT';
-      ctx.fillText(title, canvas.width / 2, 180);
-
-      ctx.fillStyle = '#64748b';
-      ctx.font = `24px ${theme.font}`;
-      ctx.fillText('This is to officially recognize that', canvas.width / 2, 260);
-
-      ctx.fillStyle = '#0f172a';
-      ctx.font = `bold 85px ${theme.font}`;
-      ctx.fillText(cert.studentName.toUpperCase(), canvas.width / 2, 360);
-
+    // Separator line
+    if (cert.template !== 'minimal') {
       ctx.beginPath();
-      ctx.moveTo(canvas.width / 2 - 350, 385);
-      ctx.lineTo(canvas.width / 2 + 350, 385);
+      ctx.moveTo(canvas.width / 2 - 300, 395);
+      ctx.lineTo(canvas.width / 2 + 300, 395);
       ctx.strokeStyle = theme.primary;
       ctx.lineWidth = 2;
       ctx.stroke();
-
-      ctx.fillStyle = '#64748b';
-      ctx.font = `24px ${theme.font}`;
-      ctx.fillText('for the successful completion of the program', canvas.width / 2, 460);
-
-      ctx.fillStyle = '#0f172a';
-      ctx.font = `bold 50px ${theme.font}`;
-      ctx.fillText(cert.course.toUpperCase(), canvas.width / 2, 530);
-
-      ctx.fillStyle = '#475569';
-      ctx.font = `italic 22px ${theme.font}`;
-      ctx.fillText(`Issued on ${cert.date} • Final Grade: ${cert.grade}`, canvas.width / 2, 600);
-
-      ctx.textAlign = 'center';
-      ctx.fillStyle = '#94a3b8';
-      ctx.font = '12px monospace';
-      ctx.fillText(`VERIFIED BLOCKCHAIN ID: ${cert.id}`, canvas.width / 2, 790);
     }
 
-    // 4. Seal/Signature Section
-    if (cert.template !== 'minimal') {
-      ctx.save();
-      ctx.translate(canvas.width / 2, 700);
+    // Tagline
+    ctx.fillStyle = theme.muted;
+    ctx.font = `20px ${theme.font}`;
+    const tagline = cert.template === 'minimal' ? 'Successfully completed and mastered the curriculum of' : 'for the successful completion of the program';
+    ctx.fillText(tagline, alignX, 450);
 
-      ctx.beginPath();
-      ctx.arc(0, 0, 60, 0, Math.PI * 2);
-      ctx.fillStyle = `${theme.primary}15`;
-      ctx.fill();
-      ctx.strokeStyle = theme.primary;
-      ctx.lineWidth = 1;
-      ctx.stroke();
+    // Course Name
+    ctx.fillStyle = cert.template === 'minimal' ? theme.primary : theme.text;
+    ctx.font = `bold 44px ${theme.font}`;
+    ctx.fillText(cert.course.toUpperCase(), alignX, 520);
 
-      ctx.textAlign = 'center';
-      ctx.fillStyle = theme.primary;
-      ctx.font = 'bold 14px sans-serif';
-      ctx.fillText('CertiChain', 0, -12);
-      ctx.font = '7px sans-serif';
-      ctx.fillText('VERIFIED', 0, 24);
+    // 5. Seal & Signature Section (Bottom)
+    const sealX = canvas.width / 2;
+    const sealY = 675;
 
-      ctx.font = 'bold 28px sans-serif';
-      ctx.fillText('✓', 0, 8);
-      ctx.restore();
+    // Draw Seal
+    ctx.save();
+    ctx.translate(sealX, sealY);
+
+    let sealGrad;
+    if (cert.template === 'excellence') {
+      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
+      sealGrad.addColorStop(0, '#f3e5ab');
+      sealGrad.addColorStop(1, '#d4af37');
+    } else if (cert.template === 'academic') {
+      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
+      sealGrad.addColorStop(0, '#d4af37');
+      sealGrad.addColorStop(1, '#aa7c11');
+    } else if (cert.template === 'minimal') {
+      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
+      sealGrad.addColorStop(0, '#38bdf8');
+      sealGrad.addColorStop(1, '#818cf8');
     } else {
-      ctx.textAlign = 'right';
-      ctx.fillStyle = theme.primary;
-      ctx.font = 'bold 24px sans-serif';
-      ctx.fillText('✓ VERIFIED', canvas.width - 100, 750);
-      ctx.fillStyle = '#475569';
-      ctx.font = '12px sans-serif';
-      ctx.fillText('Authorized Signature', canvas.width - 100, 770);
+      sealGrad = ctx.createLinearGradient(-30, -30, 30, 30);
+      sealGrad.addColorStop(0, '#1e3a8a');
+      sealGrad.addColorStop(1, '#3b82f6');
     }
 
+    ctx.beginPath();
+    ctx.arc(0, 0, 30, 0, Math.PI * 2);
+    ctx.fillStyle = sealGrad;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Checkmark inside seal
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 22px sans-serif';
+    ctx.fillText('✓', 0, 8);
+    ctx.restore();
+
+    // Seal text
+    ctx.textAlign = 'center';
+    ctx.fillStyle = theme.muted;
+    ctx.font = `bold 12px ${theme.font}`;
+    ctx.fillText('VERIFIED SEAL', sealX, sealY + 48);
+
+    // Left info (Date of Issue)
+    ctx.textAlign = 'left';
+    ctx.fillStyle = theme.muted;
+    ctx.font = `bold 12px ${theme.font}`;
+    ctx.fillText('DATE OF ISSUE', 120, sealY + 20);
+    ctx.fillStyle = cert.template === 'minimal' ? '#ffffff' : theme.text;
+    ctx.font = `bold 18px ${theme.font}`;
+    ctx.fillText(cert.date, 120, sealY + 45);
+
+    // Right info (Grade Achieved)
+    ctx.textAlign = 'right';
+    ctx.fillStyle = theme.muted;
+    ctx.font = `bold 12px ${theme.font}`;
+    ctx.fillText('GRADE ACHIEVED', canvas.width - 120, sealY + 20);
+    ctx.fillStyle = cert.template === 'minimal' ? '#ffffff' : theme.text;
+    ctx.font = `bold 18px ${theme.font}`;
+    ctx.fillText(cert.grade, canvas.width - 120, sealY + 45);
+
+    // Blockchain Verification ID (Center Bottom Footer)
+    ctx.textAlign = 'center';
+    ctx.fillStyle = theme.muted;
+    ctx.font = '12px monospace';
+    ctx.fillText(`VERIFIED BLOCKCHAIN ID: ${cert.id}`, canvas.width / 2, 795);
+
+    // Trigger PNG Download
     const link = document.createElement('a');
     link.download = `${cert.course.replace(/\s+/g, '_')}_Certificate.png`;
     link.href = canvas.toDataURL('image/png');
