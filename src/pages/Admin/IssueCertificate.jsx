@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FilePlus, Hash, CheckCircle, Copy, Check, Award } from 'lucide-react';
 import { saveCertificate } from '../../utils/storage';
+import { CertificatePreview } from '../Public/QRVerify';
 
 const IssueCertificate = () => {
   const [formData, setFormData] = useState({
@@ -164,105 +165,17 @@ const IssueCertificate = () => {
 
         {/* Live Preview */}
         <div>
-          <div className="glass-panel" style={{ padding: '2rem', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.8) 100%)', border: '1px solid rgba(255,255,255,0.1)' }}>
+          <div className="glass-panel" style={{ padding: '2.5rem', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.8) 0%, rgba(30, 41, 59, 0.8) 100%)', border: '1px solid rgba(255,255,255,0.1)' }}>
             <h3 style={{ color: 'var(--text-secondary)', marginBottom: '2rem', textTransform: 'uppercase', letterSpacing: '2px', fontSize: '0.875rem' }}>Certificate Preview</h3>
             
-            <div style={{ 
-              width: '100%', 
-              aspectRatio: '1.414', 
-              background: formData.template === 'minimal' ? '#0f172a' : formData.template === 'academic' ? '#fffdf9' : '#ffffff', 
-              borderRadius: '4px', 
-              padding: formData.template === 'minimal' ? '0' : '2rem', 
-              display: 'flex', 
-              flexDirection: 'column', 
-              alignItems: formData.template === 'minimal' ? 'flex-start' : 'center', 
-              justifyContent: 'center', 
-              position: 'relative', 
-              boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
-              overflow: 'hidden',
-              border: formData.template === 'excellence' ? '12px solid #d97706' : 'none'
-            }}>
-              {formData.template === 'minimal' && (
-                <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: '40px', background: templates.find(t => t.id === 'minimal').color }}></div>
-              )}
-              
-              <div style={{ 
-                border: formData.template === 'academic' ? '4px double #1e293b' : formData.template === 'minimal' || formData.template === 'excellence' ? 'none' : '2px solid #e2e8f0', 
-                width: '100%', 
-                height: '100%', 
-                padding: formData.template === 'minimal' ? '3rem 4rem' : '1.5rem', 
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: formData.template === 'minimal' ? 'flex-start' : 'center', 
-                justifyContent: 'center', 
-                textAlign: formData.template === 'minimal' ? 'left' : 'center' 
-              }}>
-                <h2 style={{ 
-                  color: templates.find(t => t.id === formData.template)?.color, 
-                  fontFamily: formData.template === 'academic' || formData.template === 'excellence' ? 'serif' : 'sans-serif', 
-                  fontSize: formData.template === 'minimal' ? '1.5rem' : '1.1rem', 
-                  marginBottom: '0.75rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1px'
-                }}>
-                  {formData.template === 'academic' ? 'Diploma of Completion' : 
-                   formData.template === 'excellence' ? 'Certificate of Excellence' : 'Certificate of Achievement'}
-                </h2>
-                
-                <p style={{ color: formData.template === 'minimal' ? '#94a3b8' : '#64748b', fontSize: '0.7rem', marginBottom: '0.5rem' }}>
-                  {formData.template === 'minimal' ? 'This digital asset confirms that' : 'This is to officially recognize that'}
-                </p>
-                
-                <h1 style={{ 
-                  color: formData.template === 'minimal' ? '#ffffff' : '#0f172a', 
-                  fontFamily: formData.template === 'academic' || formData.template === 'excellence' ? 'serif' : 'sans-serif', 
-                  fontSize: formData.template === 'minimal' ? '2rem' : '1.5rem', 
-                  borderBottom: formData.template === 'minimal' ? 'none' : `1px solid ${templates.find(t => t.id === formData.template)?.color}55`, 
-                  paddingBottom: '0.25rem', 
-                  minWidth: formData.template === 'minimal' ? 'auto' : '180px', 
-                  marginBottom: '1rem' 
-                }}>
-                  {formData.studentName || 'Student Name'}
-                </h1>
-                
-                <p style={{ color: formData.template === 'minimal' ? '#94a3b8' : '#64748b', fontSize: '0.7rem', marginBottom: '0.5rem' }}>
-                  {formData.template === 'minimal' ? `Successfully achieved mastery in` : 'for the successful completion of the program'}
-                </p>
-                
-                <h3 style={{ color: formData.template === 'minimal' ? templates.find(t => t.id === 'minimal').color : '#0f172a', fontSize: '1rem', marginBottom: '1.5rem', fontWeight: 700 }}>
-                  {formData.courseName || 'Course Name'}
-                </h3>
-                
-                <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', marginTop: 'auto', alignItems: 'flex-end' }}>
-                  <div style={{ textAlign: 'left' }}>
-                    <div style={{ fontSize: '0.6rem', color: formData.template === 'minimal' ? '#475569' : '#64748b' }}>Date of Issue</div>
-                    <div style={{ color: formData.template === 'minimal' ? '#ffffff' : '#0f172a', fontSize: '0.7rem', fontWeight: 600 }}>{formData.issueDate || '--'}</div>
-                  </div>
-
-                  {/* Cryptographic verification badge */}
-                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-                    <div style={{ 
-                      background: 'rgba(16, 185, 129, 0.1)', 
-                      color: '#10b981', 
-                      border: '1px solid rgba(16, 185, 129, 0.3)',
-                      borderRadius: '50%',
-                      width: '36px',
-                      height: '36px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                    }}>
-                      <CheckCircle size={18} />
-                    </div>
-                    <div style={{ fontSize: '0.45rem', color: '#10b981', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Verified</div>
-                  </div>
-
-                  <div style={{ textAlign: formData.template === 'minimal' ? 'left' : 'right' }}>
-                    <div style={{ fontSize: '0.6rem', color: formData.template === 'minimal' ? '#475569' : '#64748b' }}>Grade Achieved</div>
-                    <div style={{ color: formData.template === 'minimal' ? '#ffffff' : '#0f172a', fontSize: '0.7rem', fontWeight: 600 }}>{formData.grade || '--'}</div>
-                  </div>
-                </div>
-              </div>
+            <div style={{ width: '100%', maxWidth: '460px' }}>
+              <CertificatePreview cert={{
+                studentName: formData.studentName || 'Student Name',
+                course: formData.courseName || 'Course Name',
+                date: formData.issueDate || 'YYYY-MM-DD',
+                grade: formData.grade || 'A+',
+                template: formData.template
+              }} />
             </div>
           </div>
         </div>

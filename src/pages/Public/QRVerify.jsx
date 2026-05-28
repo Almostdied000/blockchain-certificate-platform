@@ -133,7 +133,7 @@ const PremiumBadge = ({ template }) => {
   );
 };
 
-const CertificatePreview = ({ cert }) => {
+export const CertificatePreview = ({ cert }) => {
   const getTemplateStyles = () => {
     switch (cert.template) {
       case 'academic':
