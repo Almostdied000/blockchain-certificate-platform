@@ -38,22 +38,22 @@ const PremiumBadge = ({ template }) => {
     return (
       <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         <div style={{
-          width: '54px',
-          height: '54px',
+          width: '7.5cqw',
+          height: '7.5cqw',
           background: 'linear-gradient(135deg, #090d16 0%, #1e293b 100%)',
-          border: '2px dashed #38bdf8',
-          borderRadius: '12px',
+          border: '0.25cqw dashed #38bdf8',
+          borderRadius: '1.5cqw',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 0 15px rgba(56, 189, 248, 0.35)',
+          boxShadow: '0 0 2cqw rgba(56, 189, 248, 0.35)',
           position: 'relative',
           zIndex: 2
         }}>
-          <div style={{ position: 'absolute', inset: '4px', border: '1px solid rgba(56, 189, 248, 0.2)', borderRadius: '8px' }} />
-          <CheckCircle size={22} color="#38bdf8" />
+          <div style={{ position: 'absolute', inset: '0.5cqw', border: '0.12cqw solid rgba(56, 189, 248, 0.2)', borderRadius: '1cqw' }} />
+          <CheckCircle style={{ width: '3.5cqw', height: '3.5cqw' }} color="#38bdf8" />
         </div>
-        <span style={{ fontSize: '0.5rem', color: '#38bdf8', marginTop: '6px', fontWeight: 700, letterSpacing: '1px', textTransform: 'uppercase' }}>
+        <span style={{ fontSize: '0.7cqw', color: '#38bdf8', marginTop: '0.8cqw', fontWeight: 700, letterSpacing: '0.1cqw', textTransform: 'uppercase' }}>
           VERIFIED CHIP
         </span>
       </div>
@@ -61,69 +61,69 @@ const PremiumBadge = ({ template }) => {
   }
 
   return (
-    <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '80px', height: '75px' }}>
+    <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', width: '11cqw', height: '11cqw' }}>
       {/* Hanging Ribbons */}
       <div style={{
         position: 'absolute',
-        top: '25px',
-        left: '20px',
-        width: '16px',
-        height: '42px',
+        top: '3.5cqw',
+        left: '2.5cqw',
+        width: '2.2cqw',
+        height: '6cqw',
         background: ribbonColorL,
         transform: 'rotate(-10deg)',
         clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 50% 80%, 0% 100%)',
         zIndex: 1,
-        boxShadow: '0 3px 6px rgba(0,0,0,0.2)'
+        boxShadow: '0 0.4cqw 0.8cqw rgba(0,0,0,0.2)'
       }} />
       <div style={{
         position: 'absolute',
-        top: '25px',
-        right: '20px',
-        width: '16px',
-        height: '42px',
+        top: '3.5cqw',
+        right: '2.5cqw',
+        width: '2.2cqw',
+        height: '6cqw',
         background: ribbonColorR,
         transform: 'rotate(10deg)',
         clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 50% 80%, 0% 100%)',
         zIndex: 1,
-        boxShadow: '0 3px 6px rgba(0,0,0,0.2)'
+        boxShadow: '0 0.4cqw 0.8cqw rgba(0,0,0,0.2)'
       }} />
 
       {/* Starburst Foil Badge */}
       <div style={{
-        width: '52px',
-        height: '52px',
+        width: '7cqw',
+        height: '7cqw',
         borderRadius: '50%',
         background: isExcellence 
           ? 'radial-gradient(circle, #fff3b0 0%, #d4af37 60%, #aa7c11 100%)'
           : isAcademic
           ? 'radial-gradient(circle, #fffae6 0%, #e5c158 60%, #b89127 100%)'
           : 'radial-gradient(circle, #60a5fa 0%, #1e3a8a 80%, #0f172a 100%)',
-        border: '2px solid rgba(255, 255, 255, 0.4)',
+        border: '0.25cqw solid rgba(255, 255, 255, 0.4)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+        boxShadow: '0 0.5cqw 1.5cqw rgba(0,0,0,0.3)',
         position: 'relative',
         zIndex: 2,
-        outline: isExcellence || isAcademic ? '2px solid #d4af37' : '2px solid #1e3a8a',
-        outlineOffset: '-4px'
+        outline: isExcellence || isAcademic ? '0.25cqw solid #d4af37' : '0.25cqw solid #1e3a8a',
+        outlineOffset: '-0.5cqw'
       }}>
         {/* Inner dashed detail */}
         <div style={{
           position: 'absolute',
           inset: 0,
           borderRadius: '50%',
-          border: '1px dashed rgba(255,255,255,0.7)',
+          border: '0.12cqw dashed rgba(255,255,255,0.7)',
           zIndex: 2
         }} />
-        <CheckCircle size={22} color="#ffffff" style={{ zIndex: 3 }} />
+        <CheckCircle style={{ width: '3.5cqw', height: '3.5cqw', zIndex: 3 }} color="#ffffff" />
       </div>
       <span style={{ 
-        fontSize: '0.45rem', 
+        fontSize: '0.6cqw', 
         color: isExcellence ? '#d4af37' : isAcademic ? '#84623e' : '#4b5563', 
-        marginTop: '6px', 
+        marginTop: '0.8cqw', 
         fontWeight: 800, 
-        letterSpacing: '1px', 
+        letterSpacing: '0.15cqw', 
         textTransform: 'uppercase',
         zIndex: 3
       }}>
@@ -143,8 +143,8 @@ export const CertificatePreview = ({ cert }) => {
           titleColor: '#84623e',
           subtitleColor: '#6e6259',
           fontFamily: "'Playfair Display', Georgia, serif",
-          border: '10px double #84623e',
-          innerBorder: '2px solid rgba(132, 98, 62, 0.2)',
+          border: '1.2cqw double #84623e',
+          innerBorder: '0.25cqw solid rgba(132, 98, 62, 0.2)',
           watermark: 'rgba(132, 98, 62, 0.03)'
         };
       case 'excellence':
@@ -154,8 +154,8 @@ export const CertificatePreview = ({ cert }) => {
           titleColor: '#d4af37',
           subtitleColor: '#94a3b8',
           fontFamily: "'Cinzel', serif",
-          border: '12px solid #d4af37',
-          innerBorder: '1px solid rgba(212, 175, 55, 0.3)',
+          border: '1.4cqw solid #d4af37',
+          innerBorder: '0.12cqw solid rgba(212, 175, 55, 0.3)',
           watermark: 'rgba(212, 175, 55, 0.02)'
         };
       case 'minimal':
@@ -165,7 +165,7 @@ export const CertificatePreview = ({ cert }) => {
           titleColor: '#38bdf8',
           subtitleColor: '#94a3b8',
           fontFamily: "'Montserrat', sans-serif",
-          border: '1px solid rgba(56, 189, 248, 0.2)',
+          border: '0.12cqw solid rgba(56, 189, 248, 0.2)',
           innerBorder: 'none',
           watermark: 'rgba(56, 189, 248, 0.03)'
         };
@@ -177,8 +177,8 @@ export const CertificatePreview = ({ cert }) => {
           titleColor: '#1e3a8a',
           subtitleColor: '#4b5563',
           fontFamily: "'Montserrat', sans-serif",
-          border: '16px solid #0f172a',
-          innerBorder: '1px solid #d4af37',
+          border: '2cqw solid #0f172a',
+          innerBorder: '0.12cqw solid #d4af37',
           watermark: 'rgba(30, 58, 138, 0.02)'
         };
     }
@@ -191,17 +191,17 @@ export const CertificatePreview = ({ cert }) => {
       return (
         <>
           {/* Corner brackets */}
-          <div style={{ position: 'absolute', top: '15px', left: '15px', width: '30px', height: '30px', borderTop: '4px solid #84623e', borderLeft: '4px solid #84623e' }} />
-          <div style={{ position: 'absolute', top: '15px', right: '15px', width: '30px', height: '30px', borderTop: '4px solid #84623e', borderRight: '4px solid #84623e' }} />
-          <div style={{ position: 'absolute', bottom: '15px', left: '15px', width: '30px', height: '30px', borderBottom: '4px solid #84623e', borderLeft: '4px solid #84623e' }} />
-          <div style={{ position: 'absolute', bottom: '15px', right: '15px', width: '30px', height: '30px', borderBottom: '4px solid #84623e', borderRight: '4px solid #84623e' }} />
+          <div style={{ position: 'absolute', top: '2cqw', left: '2cqw', width: '4cqw', height: '4cqw', borderTop: '0.5cqw solid #84623e', borderLeft: '0.5cqw solid #84623e' }} />
+          <div style={{ position: 'absolute', top: '2cqw', right: '2cqw', width: '4cqw', height: '4cqw', borderTop: '0.5cqw solid #84623e', borderRight: '0.5cqw solid #84623e' }} />
+          <div style={{ position: 'absolute', bottom: '2cqw', left: '2cqw', width: '4cqw', height: '4cqw', borderBottom: '0.5cqw solid #84623e', borderLeft: '0.5cqw solid #84623e' }} />
+          <div style={{ position: 'absolute', bottom: '2cqw', right: '2cqw', width: '4cqw', height: '4cqw', borderBottom: '0.5cqw solid #84623e', borderRight: '0.5cqw solid #84623e' }} />
           {/* Watermark Crest */}
           <div style={{
             position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-            width: '320px', height: '320px', pointerEvents: 'none', opacity: 0.08, zIndex: 0,
-            border: '8px double #84623e', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center'
+            width: '40cqw', height: '40cqw', pointerEvents: 'none', opacity: 0.08, zIndex: 0,
+            border: '1cqw double #84623e', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center'
           }}>
-            <Award size={180} color="#84623e" />
+            <Award style={{ width: '22cqw', height: '22cqw' }} color="#84623e" />
           </div>
         </>
       );
@@ -212,14 +212,14 @@ export const CertificatePreview = ({ cert }) => {
           {/* Glowing Radial Watermark */}
           <div style={{
             position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-            width: '500px', height: '500px', pointerEvents: 'none', zIndex: 0,
+            width: '60cqw', height: '60cqw', pointerEvents: 'none', zIndex: 0,
             background: 'radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%)'
           }} />
           {/* Gold Corners */}
-          <div style={{ position: 'absolute', top: '10px', left: '10px', width: '20px', height: '20px', borderTop: '2px solid #d4af37', borderLeft: '2px solid #d4af37' }} />
-          <div style={{ position: 'absolute', top: '10px', right: '10px', width: '20px', height: '20px', borderTop: '2px solid #d4af37', borderRight: '2px solid #d4af37' }} />
-          <div style={{ position: 'absolute', bottom: '10px', left: '10px', width: '20px', height: '20px', borderBottom: '2px solid #d4af37', borderLeft: '2px solid #d4af37' }} />
-          <div style={{ position: 'absolute', bottom: '10px', right: '10px', width: '20px', height: '20px', borderBottom: '2px solid #d4af37', borderRight: '2px solid #d4af37' }} />
+          <div style={{ position: 'absolute', top: '1.5cqw', left: '1.5cqw', width: '2.5cqw', height: '2.5cqw', borderTop: '0.25cqw solid #d4af37', borderLeft: '0.25cqw solid #d4af37' }} />
+          <div style={{ position: 'absolute', top: '1.5cqw', right: '1.5cqw', width: '2.5cqw', height: '2.5cqw', borderTop: '0.25cqw solid #d4af37', borderRight: '0.25cqw solid #d4af37' }} />
+          <div style={{ position: 'absolute', bottom: '1.5cqw', left: '1.5cqw', width: '2.5cqw', height: '2.5cqw', borderBottom: '0.25cqw solid #d4af37', borderLeft: '0.25cqw solid #d4af37' }} />
+          <div style={{ position: 'absolute', bottom: '1.5cqw', right: '1.5cqw', width: '2.5cqw', height: '2.5cqw', borderBottom: '0.25cqw solid #d4af37', borderRight: '0.25cqw solid #d4af37' }} />
         </>
       );
     }
@@ -230,15 +230,15 @@ export const CertificatePreview = ({ cert }) => {
           <div style={{
             position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.05, zIndex: 0,
             backgroundImage: 'linear-gradient(rgba(56, 189, 248, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(56, 189, 248, 0.3) 1px, transparent 1px)',
-            backgroundSize: '20px 20px'
+            backgroundSize: '2.5cqw 2.5cqw'
           }} />
           {/* Glowing Tech blobs */}
           <div style={{
-            position: 'absolute', top: '-10%', right: '-10%', width: '300px', height: '300px',
+            position: 'absolute', top: '-10%', right: '-10%', width: '40cqw', height: '40cqw',
             background: 'radial-gradient(circle, rgba(129, 140, 248, 0.15) 0%, transparent 70%)', pointerEvents: 'none'
           }} />
           <div style={{
-            position: 'absolute', bottom: '-10%', left: '-10%', width: '300px', height: '300px',
+            position: 'absolute', bottom: '-10%', left: '-10%', width: '40cqw', height: '40cqw',
             background: 'radial-gradient(circle, rgba(56, 189, 248, 0.15) 0%, transparent 70%)', pointerEvents: 'none'
           }} />
         </>
@@ -249,11 +249,11 @@ export const CertificatePreview = ({ cert }) => {
         {/* Subtle geometric lines */}
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none', opacity: 0.02, zIndex: 0,
-          backgroundImage: 'repeating-linear-gradient(45deg, #1e3a8a, #1e3a8a 10px, transparent 10px, transparent 20px)'
+          backgroundImage: 'repeating-linear-gradient(45deg, #1e3a8a, #1e3a8a 1.2cqw, transparent 1.2cqw, transparent 2.4cqw)'
         }} />
         {/* Thin Gold Inner Border */}
         <div style={{
-          position: 'absolute', inset: '8px', border: '1px solid #d4af37', pointerEvents: 'none'
+          position: 'absolute', inset: '1cqw', border: '0.12cqw solid #d4af37', pointerEvents: 'none'
         }} />
       </>
     );
@@ -265,17 +265,18 @@ export const CertificatePreview = ({ cert }) => {
         width: '100%',
         aspectRatio: '1.414',
         background: style.bg,
-        borderRadius: '8px',
-        padding: '2.5rem',
+        borderRadius: '1cqw',
+        padding: '5cqw',
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
-        boxShadow: '0 25px 60px rgba(0,0,0,0.6)',
+        boxShadow: '0 2.5cqw 6cqw rgba(0,0,0,0.6)',
         overflow: 'hidden',
         border: style.border,
         boxSizing: 'border-box',
         color: style.textColor,
-        fontFamily: style.fontFamily
+        fontFamily: style.fontFamily,
+        containerType: 'inline-size'
       }}
     >
       {renderDecorations()}
@@ -285,7 +286,7 @@ export const CertificatePreview = ({ cert }) => {
           border: style.innerBorder,
           width: '100%',
           height: '100%',
-          padding: '1.5rem',
+          padding: '3cqw',
           display: 'flex',
           flexDirection: 'column',
           alignItems: cert.template === 'minimal' ? 'flex-start' : 'center',
@@ -297,18 +298,18 @@ export const CertificatePreview = ({ cert }) => {
         }}
       >
         {cert.template !== 'minimal' && (
-          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '0.75rem', color: style.titleColor }}>
-            <Award size={48} />
+          <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5cqw', color: style.titleColor }}>
+            <Award style={{ width: '6cqw', height: '6cqw' }} />
           </div>
         )}
 
         <h2 style={{
           color: style.titleColor,
-          fontSize: cert.template === 'excellence' ? 'clamp(1.1rem, 3.2vw, 1.8rem)' : 'clamp(0.9rem, 2.5vw, 1.4rem)',
+          fontSize: cert.template === 'excellence' ? '4.5cqw' : '3.6cqw',
           fontWeight: 800,
-          marginBottom: '0.5rem',
+          marginBottom: '1cqw',
           textTransform: 'uppercase',
-          letterSpacing: '3px',
+          letterSpacing: '0.4cqw',
           marginTop: 0,
         }}>
           {cert.template === 'academic' ? 'Diploma of Completion' :
@@ -318,11 +319,11 @@ export const CertificatePreview = ({ cert }) => {
         
         <p style={{ 
           color: style.subtitleColor, 
-          fontSize: 'clamp(0.65rem, 1.5vw, 0.85rem)', 
-          marginBottom: '1rem',
+          fontSize: '2cqw', 
+          marginBottom: '2cqw',
           fontWeight: 500,
           marginTop: 0,
-          letterSpacing: '1px'
+          letterSpacing: '0.1cqw'
         }}>
           {cert.template === 'minimal' ? 'This digital credential confirms that' : 'This is to officially recognize that'}
         </p>
@@ -330,23 +331,25 @@ export const CertificatePreview = ({ cert }) => {
         <h1 style={{
           color: cert.template === 'minimal' ? '#ffffff' : style.textColor,
           fontFamily: cert.template === 'academic' || cert.template === 'excellence' ? "'Cinzel', serif" : style.fontFamily,
-          fontSize: cert.template === 'minimal' ? 'clamp(1.5rem, 4.5vw, 2.4rem)' : 'clamp(1.5rem, 4.2vw, 2.2rem)',
+          fontSize: cert.template === 'minimal' ? '5.5cqw' : '5cqw',
           fontWeight: 700,
-          borderBottom: cert.template === 'minimal' ? 'none' : `2px solid ${style.titleColor}33`,
-          paddingBottom: '0.5rem',
-          minWidth: cert.template === 'minimal' ? 'auto' : '280px',
-          marginBottom: '1rem',
+          borderBottom: cert.template === 'minimal' ? 'none' : `0.25cqw solid ${style.titleColor}33`,
+          paddingBottom: '1cqw',
+          minWidth: 'auto',
+          width: '100%',
+          textAlign: cert.template === 'minimal' ? 'left' : 'center',
+          marginBottom: '2cqw',
           display: 'inline-block',
           marginTop: 0,
-          letterSpacing: '1px'
+          letterSpacing: '0.1cqw'
         }}>
           {cert.studentName}
         </h1>
         
         <p style={{ 
           color: style.subtitleColor, 
-          fontSize: 'clamp(0.65rem, 1.5vw, 0.85rem)', 
-          marginBottom: '0.75rem',
+          fontSize: '2cqw', 
+          marginBottom: '1.5cqw',
           marginTop: 0,
         }}>
           {cert.template === 'minimal' ? 'Successfully completed and mastered the curriculum of' : 'for the successful completion of the program'}
@@ -354,11 +357,11 @@ export const CertificatePreview = ({ cert }) => {
         
         <h3 style={{ 
           color: cert.template === 'minimal' ? style.titleColor : style.textColor, 
-          fontSize: 'clamp(0.9rem, 2.8vw, 1.4rem)', 
-          marginBottom: '2rem', 
+          fontSize: '3.2cqw', 
+          marginBottom: '3cqw', 
           fontWeight: 700,
           marginTop: 0,
-          letterSpacing: '0.5px'
+          letterSpacing: '0.05cqw'
         }}>
           {cert.course}
         </h3>
@@ -371,16 +374,15 @@ export const CertificatePreview = ({ cert }) => {
           alignItems: 'flex-end' 
         }}>
           <div style={{ textAlign: 'left' }}>
-            <div style={{ fontSize: '0.55rem', color: style.subtitleColor, textTransform: 'uppercase', letterSpacing: '1px' }}>Date of Issue</div>
-            <div style={{ color: style.textColor, fontSize: '0.75rem', fontWeight: 600 }}>{cert.date}</div>
+            <div style={{ fontSize: '1.4cqw', color: style.subtitleColor, textTransform: 'uppercase', letterSpacing: '0.1cqw' }}>Date of Issue</div>
+            <div style={{ color: style.textColor, fontSize: '1.8cqw', fontWeight: 600 }}>{cert.date}</div>
           </div>
 
-          {/* Secure Verification Stamp / Premium Badge */}
           <PremiumBadge template={cert.template} />
 
           <div style={{ textAlign: cert.template === 'minimal' ? 'left' : 'right' }}>
-            <div style={{ fontSize: '0.55rem', color: style.subtitleColor, textTransform: 'uppercase', letterSpacing: '1px' }}>Grade Achieved</div>
-            <div style={{ color: style.textColor, fontSize: '0.75rem', fontWeight: 600 }}>{cert.grade}</div>
+            <div style={{ fontSize: '1.4cqw', color: style.subtitleColor, textTransform: 'uppercase', letterSpacing: '0.1cqw' }}>Grade Achieved</div>
+            <div style={{ color: style.textColor, fontSize: '1.8cqw', fontWeight: 600 }}>{cert.grade}</div>
           </div>
         </div>
       </div>
