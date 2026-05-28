@@ -10,7 +10,7 @@ import Students from './pages/Admin/Students';
 import IssueCertificate from './pages/Admin/IssueCertificate';
 import VerifyCertificate from './pages/Admin/VerifyCertificate';
 import StudentDashboard from './pages/Student/Dashboard';
-import QRVerify from './pages/Public/QRVerify';
+import VerificationPortal from './pages/Public/VerificationPortal';
 import { getCurrentUser } from './utils/storage';
 import './App.css';
 
@@ -31,7 +31,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         
         {/* Public QR Verification — accessible without login */}
-        <Route path="/verify" element={<QRVerify />} />
+        <Route path="/verify" element={<VerificationPortal />} />
 
         {/* Admin / Verifier Routes */}
         <Route path="/admin" element={user && user.role === 'admin' ? <AdminLayout setUser={setUser} user={user} /> : <Navigate to="/login" />}>

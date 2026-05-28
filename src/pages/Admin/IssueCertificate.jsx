@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FilePlus, Hash, CheckCircle, Copy, Check, Award } from 'lucide-react';
 import { saveCertificate } from '../../utils/storage';
-import { CertificatePreview } from '../Public/QRVerify';
+import { CertificatePreview } from '../Public/VerificationPortal';
 
 const IssueCertificate = () => {
   const [formData, setFormData] = useState({

@@ -12,6 +12,14 @@ const Login = ({ setUser }) => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const handleRoleChange = (newRole) => {
+    setRole(newRole);
+    setEmail('');
+    setPassword('');
+    setSecurityCode('');
+    setError('');
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
@@ -57,7 +65,7 @@ const Login = ({ setUser }) => {
         <div style={{ display: 'flex', gap: '1rem', marginBottom: '2rem' }}>
           <button 
             type="button" 
-            onClick={() => setRole('admin')}
+            onClick={() => handleRoleChange('admin')}
             className={`btn ${role === 'admin' ? 'btn-primary' : 'btn-secondary'}`} 
             style={{ flex: 1 }}
           >
@@ -65,7 +73,7 @@ const Login = ({ setUser }) => {
           </button>
           <button 
             type="button" 
-            onClick={() => setRole('student')}
+            onClick={() => handleRoleChange('student')}
             className={`btn ${role === 'student' ? 'btn-primary' : 'btn-secondary'}`} 
             style={{ flex: 1 }}
           >
