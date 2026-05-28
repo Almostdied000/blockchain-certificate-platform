@@ -30,6 +30,7 @@ const Register = () => {
     confirmPassword: '',
     securityQuestion: SECURITY_QUESTIONS[0],
     securityAnswer: '',
+    securityCode: '',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -44,6 +45,11 @@ const Register = () => {
     e.preventDefault();
     setError('');
 
+    if (role === 'admin' && formData.securityCode !== '8050') {
+      setError('Invalid admin security code. You must enter the correct code to create an admin account.');
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       return;
@@ -56,7 +62,7 @@ const Register = () => {
 
     try {
       await registerUser({
-        name: formData.name.trim(),
+        name: role === 'admin' ? 'Admin' : formData.name.trim(),
         email: formData.email.trim().toLowerCase(),
         password: formData.password.trim(),
         role: role,
@@ -108,22 +114,42 @@ const Register = () => {
         )}
 
         <form onSubmit={handleRegister}>
-          {/* Full Name */}
-          <div className="input-group">
-            <label className="input-label">Full Name</label>
-            <div style={{ position: 'relative' }}>
-              <User size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-              <input
-                type="text"
-                name="name"
-                className="input-field"
-                style={{ paddingLeft: '3rem' }}
-                placeholder="John Doe"
-                onChange={handleChange}
-                required
-              />
+          {/* Full Name / Admin Security Code */}
+          {role === 'student' ? (
+            <div className="input-group">
+              <label className="input-label">Full Name</label>
+              <div style={{ position: 'relative' }}>
+                <User size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <input
+                  type="text"
+                  name="name"
+                  className="input-field"
+                  style={{ paddingLeft: '3rem' }}
+                  placeholder="John Doe"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required={role === 'student'}
+                />
+              </div>
             </div>
-          </div>
+          ) : (
+            <div className="input-group">
+              <label className="input-label">Admin Security Code</label>
+              <div style={{ position: 'relative' }}>
+                <Shield size={18} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
+                <input
+                  type="password"
+                  name="securityCode"
+                  className="input-field"
+                  style={{ paddingLeft: '3rem' }}
+                  placeholder="Enter security code"
+                  value={formData.securityCode}
+                  onChange={handleChange}
+                  required={role === 'admin'}
+                />
+              </div>
+            </div>
+          )}
 
           {/* Email */}
           <div className="input-group">
