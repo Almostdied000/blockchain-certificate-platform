@@ -167,14 +167,16 @@ const IssueCertificate = () => {
             Certificate Preview
           </h3>
           
-          <div style={{ width: '100%', maxWidth: '460px', display: 'flex', justifyContent: 'center' }}>
-            <CertificatePreview cert={{
-              studentName: formData.studentName || 'Student Name',
-              course: formData.courseName || 'Course Name',
-              date: formData.issueDate || 'YYYY-MM-DD',
-              grade: formData.grade || 'A+',
-              template: formData.template
-            }} />
+          <div style={{ width: '100%', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: '100%', maxWidth: '460px', display: 'flex', justifyContent: 'center' }}>
+              <CertificatePreview cert={{
+                studentName: formData.studentName || 'Student Name',
+                course: formData.courseName || 'Course Name',
+                date: formData.issueDate || 'YYYY-MM-DD',
+                grade: formData.grade || 'A+',
+                template: formData.template
+              }} />
+            </div>
           </div>
         </div>
       </div>

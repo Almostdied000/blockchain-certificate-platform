@@ -266,7 +266,7 @@ export const CertificatePreview = ({ cert }) => {
         aspectRatio: '1.414',
         background: style.bg,
         borderRadius: '1cqw',
-        padding: '5cqw',
+        padding: 0,
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
@@ -284,8 +284,11 @@ export const CertificatePreview = ({ cert }) => {
       <div 
         style={{
           border: style.innerBorder,
-          width: '100%',
-          height: '100%',
+          position: 'absolute',
+          top: '5cqw',
+          left: '5cqw',
+          right: '5cqw',
+          bottom: '5cqw',
           padding: '3cqw',
           display: 'flex',
           flexDirection: 'column',
@@ -293,7 +296,6 @@ export const CertificatePreview = ({ cert }) => {
           justifyContent: 'center',
           textAlign: cert.template === 'minimal' ? 'left' : 'center',
           boxSizing: 'border-box',
-          position: 'relative',
           zIndex: 1
         }}
       >
