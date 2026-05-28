@@ -195,9 +195,11 @@ const Login = ({ setUser }) => {
           </button>
         </form>
 
-        <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-          Don't have an account? <Link to={`/register?role=${role}`} style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>Create One</Link>
-        </div>
+        {role === 'admin' && (
+          <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+            Don't have an account? <Link to={`/register?role=${role}`} style={{ color: 'var(--accent-primary)', fontWeight: 600 }}>Create One</Link>
+          </div>
+        )}
       </div>
     </div>
   );
