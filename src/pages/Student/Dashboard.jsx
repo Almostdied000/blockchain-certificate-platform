@@ -179,22 +179,20 @@ const Dashboard = () => {
       ctx.textAlign = 'center';
       ctx.fillStyle = theme.primary;
       ctx.font = 'bold 14px sans-serif';
-      ctx.fillText('CertiChain', 0, -5);
+      ctx.fillText('CertiChain', 0, -12);
       ctx.font = '7px sans-serif';
-      ctx.fillText('VERIFIED', 0, 8);
+      ctx.fillText('VERIFIED', 0, 24);
 
-      // Dhanu Signature
-      ctx.fillStyle = theme.secondary;
-      ctx.font = 'italic 20px cursive';
-      ctx.rotate(-0.2);
-      ctx.fillText('Dhanu', 0, 5);
+      // Verified checkmark symbol instead of Dhanu
+      ctx.font = 'bold 28px sans-serif';
+      ctx.fillText('✓', 0, 8);
       ctx.restore();
     } else {
       // Minimal Signature on Right
       ctx.textAlign = 'right';
       ctx.fillStyle = theme.primary;
-      ctx.font = 'italic 28px cursive';
-      ctx.fillText('Dhanu', canvas.width - 100, 750);
+      ctx.font = 'bold 24px sans-serif';
+      ctx.fillText('✓ VERIFIED', canvas.width - 100, 750);
       ctx.fillStyle = '#475569';
       ctx.font = '12px sans-serif';
       ctx.fillText('Authorized Signature', canvas.width - 100, 770);

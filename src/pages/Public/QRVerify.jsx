@@ -198,13 +198,15 @@ const CertificatePreview = ({ cert }) => {
           {cert.template !== 'minimal' ? (
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative' }}>
               <div style={{ 
-                fontFamily: "'Cookie', 'Alex Brush', cursive", 
-                fontSize: '1.75rem', 
-                color: currentTheme.color, 
-                transform: 'rotate(-5deg) translateY(4px)', 
-                display: 'inline-block' 
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: currentTheme.color,
+                marginBottom: '4px',
+                zIndex: 1,
+                transform: 'translateY(2px)'
               }}>
-                Dhanu
+                <CheckCircle size={24} />
               </div>
               <div style={{ 
                 width: '32px', 
@@ -213,7 +215,7 @@ const CertificatePreview = ({ cert }) => {
                 border: `1px solid ${currentTheme.color}44`,
                 background: `${currentTheme.color}0a`,
                 position: 'absolute',
-                top: '-8px',
+                top: '-4px',
                 zIndex: 0,
                 opacity: 0.5
               }} />
@@ -222,17 +224,14 @@ const CertificatePreview = ({ cert }) => {
               </div>
             </div>
           ) : (
-            <div style={{ textAlign: 'left' }}>
+            <div style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
               <div style={{ 
-                fontFamily: "'Cookie', 'Alex Brush', cursive", 
-                fontSize: '1.8rem', 
-                color: currentTheme.color, 
-                transform: 'rotate(-5deg)', 
-                display: 'inline-block' 
+                color: currentTheme.color,
+                marginBottom: '4px'
               }}>
-                Dhanu
+                <CheckCircle size={24} />
               </div>
-              <div style={{ fontSize: '0.55rem', color: currentTheme.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Signature</div>
+              <div style={{ fontSize: '0.55rem', color: currentTheme.muted, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Verified Signature</div>
             </div>
           )}
 
@@ -461,20 +460,18 @@ const QRVerify = () => {
       ctx.textAlign = 'center';
       ctx.fillStyle = theme.primary;
       ctx.font = 'bold 14px sans-serif';
-      ctx.fillText('CertiChain', 0, -5);
+      ctx.fillText('CertiChain', 0, -12);
       ctx.font = '7px sans-serif';
-      ctx.fillText('VERIFIED', 0, 8);
+      ctx.fillText('VERIFIED', 0, 24);
 
-      ctx.fillStyle = theme.secondary;
-      ctx.font = 'italic 20px cursive';
-      ctx.rotate(-0.2);
-      ctx.fillText('Dhanu', 0, 5);
+      ctx.font = 'bold 28px sans-serif';
+      ctx.fillText('✓', 0, 8);
       ctx.restore();
     } else {
       ctx.textAlign = 'right';
       ctx.fillStyle = theme.primary;
-      ctx.font = 'italic 28px cursive';
-      ctx.fillText('Dhanu', canvas.width - 100, 750);
+      ctx.font = 'bold 24px sans-serif';
+      ctx.fillText('✓ VERIFIED', canvas.width - 100, 750);
       ctx.fillStyle = '#475569';
       ctx.font = '12px sans-serif';
       ctx.fillText('Authorized Signature', canvas.width - 100, 770);
