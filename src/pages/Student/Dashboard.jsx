@@ -219,7 +219,7 @@ const Dashboard = () => {
 
     // Header Title
     ctx.fillStyle = theme.primary;
-    const title = cert.template === 'academic' ? 'DIPLOMA OF COMPLETION' :
+    const title = cert.template === 'academic' ? 'CERTIFICATE OF COMPLETION' :
                   cert.template === 'excellence' ? 'CERTIFICATE OF EXCELLENCE' : 
                   cert.template === 'minimal' ? 'CERTIFICATE OF MASTERY' : 'CERTIFICATE OF ACHIEVEMENT';
     ctx.font = `bold ${cert.template === 'excellence' ? '54px' : '48px'} ${theme.font}`;

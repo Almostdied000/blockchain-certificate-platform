@@ -314,7 +314,7 @@ export const CertificatePreview = ({ cert }) => {
           letterSpacing: '0.4cqw',
           marginTop: 0,
         }}>
-          {cert.template === 'academic' ? 'Diploma of Completion' :
+          {cert.template === 'academic' ? 'Certificate of Completion' :
            cert.template === 'excellence' ? 'Certificate of Excellence' : 
            cert.template === 'minimal' ? 'CERTIFICATE OF MASTERY' : 'Certificate of Achievement'}
         </h2>
@@ -661,7 +661,7 @@ const QRVerify = () => {
 
     // Header Title
     ctx.fillStyle = theme.primary;
-    const title = cert.template === 'academic' ? 'DIPLOMA OF COMPLETION' :
+    const title = cert.template === 'academic' ? 'CERTIFICATE OF COMPLETION' :
                   cert.template === 'excellence' ? 'CERTIFICATE OF EXCELLENCE' : 
                   cert.template === 'minimal' ? 'CERTIFICATE OF MASTERY' : 'CERTIFICATE OF ACHIEVEMENT';
     ctx.font = `bold ${cert.template === 'excellence' ? '54px' : '48px'} ${theme.font}`;
