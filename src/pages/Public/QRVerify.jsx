@@ -597,50 +597,6 @@ const QRVerify = () => {
             </button>
           </div>
 
-          {/* QR Code Section */}
-          <div 
-            style={{ 
-              background: 'rgba(255, 255, 255, 0.04)',
-              backdropFilter: 'blur(10px)',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
-              borderRadius: '16px',
-              padding: '1.25rem',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '0.75rem',
-              maxWidth: '320px',
-              width: '100%',
-              boxSizing: 'border-box',
-              marginTop: '0.5rem',
-              boxShadow: '0 10px 30px rgba(0,0,0,0.3)'
-            }}
-          >
-            <span style={{ color: '#f1f5f9', fontSize: '0.85rem', fontWeight: 600, letterSpacing: '0.5px' }}>
-              SECURE VERIFICATION QR CODE
-            </span>
-            <div style={{
-              background: '#ffffff',
-              padding: '0.75rem',
-              borderRadius: '12px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 4px 15px rgba(0, 0, 0, 0.25)'
-            }}>
-              <img 
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
-                  `${window.location.origin}/verify?id=${certDetails.certId || certDetails.id}`
-                )}`} 
-                alt="Verification QR Code"
-                style={{ width: '130px', height: '130px', display: 'block' }}
-              />
-            </div>
-            <span style={{ color: '#94a3b8', fontSize: '0.7rem', textAlign: 'center', lineHeight: '1.4' }}>
-              Scan with any mobile device to view this authentic certificate instantly on CertiChain.
-            </span>
-          </div>
-
           {/* Verification Badge & Technical Details */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
             <div style={{ color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.4rem', fontSize: '0.85rem', fontWeight: 600 }}>

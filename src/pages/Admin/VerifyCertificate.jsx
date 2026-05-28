@@ -124,33 +124,10 @@ const VerifyCertificate = () => {
               </div>
             </div>
 
-            <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(16, 185, 129, 0.2)', display: 'flex', gap: '1.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-              <div style={{ flex: 1, minWidth: '200px' }}>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Blockchain Transaction Hash</div>
-                <div style={{ fontFamily: 'monospace', fontSize: '0.85rem', wordBreak: 'break-all', color: 'var(--accent-primary)', marginBottom: '1.25rem' }}>
-                  {certDetails.txnHash}
-                </div>
-                <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Public Verification URL</div>
-                <a 
-                  href={`${window.location.origin}/verify?id=${certDetails.certId || certDetails.id}`} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  style={{ color: 'var(--accent-primary)', fontSize: '0.85rem', textDecoration: 'none', wordBreak: 'break-all', fontWeight: 500 }}
-                >
-                  {`${window.location.origin}/verify?id=${certDetails.certId || certDetails.id}`}
-                </a>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', margin: '0 auto', background: 'rgba(255, 255, 255, 0.05)', padding: '0.75rem', borderRadius: '12px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                <div style={{ background: '#ffffff', padding: '0.5rem', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <img 
-                    src={`https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(
-                      `${window.location.origin}/verify?id=${certDetails.certId || certDetails.id}`
-                    )}`} 
-                    alt="Verification QR Code" 
-                    style={{ width: '100px', height: '100px', display: 'block' }}
-                  />
-                </div>
-                <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textAlign: 'center', fontWeight: 600 }}>SCAN TO VIEW CERTIFICATE</div>
+            <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(16, 185, 129, 0.2)' }}>
+              <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '0.5rem' }}>Blockchain Transaction Hash</div>
+              <div style={{ fontFamily: 'monospace', fontSize: '0.85rem', wordBreak: 'break-all', color: 'var(--accent-primary)' }}>
+                {certDetails.txnHash}
               </div>
             </div>
           </div>
